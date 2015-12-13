@@ -1,7 +1,7 @@
 # Espcap
 
-Espcap is a program that uses Pyshark to capture packets from a pcap file or live
-from a network interface and index them with Elasticsearch.  Since Espcap uses
+__Espcap__ is a program that uses Pyshark to capture packets from a pcap file or live
+from a network interface and index them with Elasticsearch.  Since __Espcap__ uses
 Pyshark - which provides a wrapper API to tshark - it can use wireshark dissectors
 to parse any protocol.
 
@@ -15,7 +15,7 @@ to parse any protocol.
 ## Recommendations
 
 It is highly recommended, although not required, that you use the Anaconda Python 
-distribution by Continuum Analytics for Espcap. This distribution contains Python
+distribution by Continuum Analytics for __Espcap__. This distribution contains Python
 2.7.10 and bundles a rich set of programming packages for analytics and machine 
 learning.  You can download Anaconda Python here: http://continuum.io/downloads.
 
@@ -75,7 +75,7 @@ espcap.py --dir=./test_pcaps
 When running in live capture mode you can set a maximum packet count after which the 
 capture will stop or you can just hit ctrl-c to stop a continuous capture session. 
 
-espcap uses Elasticsearch bulk insertion of packets. The <tt>--chunk</tt> enables you to set 
+__Espcap__ uses Elasticsearch bulk insertion of packets. The <tt>--chunk</tt> enables you to set 
 how many packets are sent Elasticsearch for each insertion. The default is chunk size is 100,
 but higher values (1000 - 2000) are usually better. If you get transport I/O exceptions due
 to network latency or an Elasticsearch backend that is not optimally configured, stick with
@@ -280,9 +280,9 @@ checking the <tt>envelope</tt> field contents.
 Technically epscap recognizes all the protocols supported by wireshark/tshark. However, the wireshark
 dissector set includes some strange protocols that are not really Internet protocols in the strictest
 sense, but are rather parts of other protocols. One example is <tt>media</tt> which is actually used to
-label an additional layer for the <tt>http</tt> protocol among other things. espcap uses the protocols.list
+label an additional layer for the <tt>http</tt> protocol among other things. __Espcap__ uses the protocols.list
 to help determine the application level protocol in any given packet. This file is derived from tshark
-by running the protocols.sh script in the conf directory. To ensure that espcap has only true Internet
+by running the protocols.sh script in the conf directory. To ensure that __Espcap__ has only true Internet
 protocols to choose from, the entries in protocols.list that are not truly Internet protocols have
 been commented out. Currently the commented out protocols include the following:
 ```
