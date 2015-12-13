@@ -1,4 +1,4 @@
-# espcap
+# Espcap
 
 espcap is a program that uses Pyshark to capture packets from a pcap file or live
 from a network interface and index them with Elasticsearch.  Since espcap uses
