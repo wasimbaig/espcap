@@ -1,7 +1,7 @@
 # Espcap
 
-espcap is a program that uses Pyshark to capture packets from a pcap file or live
-from a network interface and index them with Elasticsearch.  Since espcap uses
+Espcap is a program that uses Pyshark to capture packets from a pcap file or live
+from a network interface and index them with Elasticsearch.  Since Espcap uses
 Pyshark - which provides a wrapper API to tshark - it can use wireshark dissectors
 to parse any protocol.
 
@@ -15,7 +15,7 @@ to parse any protocol.
 ## Recommendations
 
 It is highly recommended, although not required, that you use the Anaconda Python 
-distribution by Continuum Analytics for espcap. This distribution contains Python
+distribution by Continuum Analytics for Espcap. This distribution contains Python
 2.7.10 and bundles a rich set of programming packages for analytics and machine 
 learning.  You can download Anaconda Python here: http://continuum.io/downloads.
 
