@@ -1,14 +1,14 @@
 # espcap
 
-espcap is a program that uses pyshark to capture packets from a pcap file or live
+espcap is a program that uses Pyshark to capture packets from a pcap file or live
 from a network interface and index them with Elasticsearch.  Since espcap uses
-pyshark - which provides a wrapper API to tshark - it can use wireshark dissectors
+Pyshark - which provides a wrapper API to tshark - it can use wireshark dissectors
 to parse any protocol.
 
 ## Requirements
 
 1. tshark (included in Wireshark)
-2. pyshark 0.3.5
+2. Pyshark 0.3.5
 3. trollius 1.0.4
 4. Elasticsearch client for Python
 
@@ -22,7 +22,7 @@ learning.  You can download Anaconda Python here: http://continuum.io/downloads.
 ## Installation
 
 1. Install Wireshark for your OS.</li>
-2. Install pyshark, trollius, and the Elasticsearch client for Python with pip:
+2. Install Pyshark, trollius, and the Elasticsearch client for Python with pip:
 <pre>
 pip uninstall pyshark
 pip install pyshark==0.3.5
