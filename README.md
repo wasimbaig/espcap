@@ -45,7 +45,7 @@ cluster. If your node IP address is 10.0.0.1 the commands would look like this:
 ./espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
 </pre>
 7. cd into the <tt>espcap/scripts</tt> directory.
-8. Run <tt>packet_query.sh as follows to check that the packet data resides in your
+8. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your
 Elasticsearch cluster:
 <pre>
 ./packet_query.sh 10.0.0.1:9200
@@ -72,8 +72,8 @@ Note that each of these modes is mutually exclusive. If you try to run <tt>espca
 than one mode you'll get an error message.
 
 You can try <tt>espcap.py</tt> in file mode using the pcap files contained in test_pcaps. To do 
-that run <tt>espcap.py</tt> from the <tt>espcap/src</tt> directory as follows (assuming you want to just 
-dump the packets to stdout):
+that run <tt>espcap.py</tt> from the <tt>espcap/src</tt> directory as follows (assuming you want to 
+just dump the packets to stdout):
 ```
 ./espcap.py --dir=../test_pcaps
 ```
