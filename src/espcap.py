@@ -8,20 +8,20 @@ from capture import file_capture, live_capture
 from utils import list_interfaces
 
 def command_line_options():
-    print "espcap.py [--dir=pcap_directory] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]"
-    print "          [--file=pcap_file] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]"
-    print "          [--nic=interface] [--node=elasticsearch_host] [--bpf=packet_filter_string] [--chunk=chunk_size] [--count=max_packets] [--trace]"
-    print "          [--help]"
-    print "          [--list-interfaces]"
+    print 'espcap.py [--dir=pcap_directory] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]'
+    print '          [--file=pcap_file] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]'
+    print '          [--nic=interface] [--node=elasticsearch_host] [--bpf=packet_filter_string] [--chunk=chunk_size] [--count=max_packets] [--trace]'
+    print '          [--help]'
+    print '          [--list-interfaces]'
 
 def example_usage():
     command_line_options()
     print
-    print "Example command line option combinations:"
-    print "espcap.py --dir=/home/pcap_directory --node=localhost:9200"
-    print "espcap.py --file=./pcap_file --node=localhost:9200 --chunk=1000"
-    print "espcap.py --nic=eth0 --node=localhost:9200 --bpf=\"tcp port 80\" --chunk=2000"
-    print "espcap.py --nic=en0 --node=localhost:9200 --bpf=\"udp port 53\" --count=500"
+    print 'Example command line option combinations:'
+    print 'espcap.py --dir=/home/pcap_directory --node=localhost:9200'
+    print 'espcap.py --file=./pcap_file --node=localhost:9200 --chunk=1000'
+    print 'espcap.py --nic=eth0 --node=localhost:9200 --bpf=\'tcp port 80\' --chunk=2000'
+    print 'espcap.py --nic=en0 --node=localhost:9200 --bpf=\'udp port 53\' --count=500'
     sys.exit()
 
 def usage():
@@ -29,11 +29,11 @@ def usage():
     sys.exit()
 
 def fine_print():
-    print "You must specify only one of the following input modes:"
-    print "[--dir=pcap_directory]"
-    print "[--file=pcap_file]"
-    print "[--nic=nic]"
-    print "Run \"espcap.py --help\" for more info"
+    print 'You must specify only one of the following input modes:'
+    print '[--dir=pcap_directory]'
+    print '[--file=pcap_file]'
+    print '[--nic=nic]'
+    print 'Run \'espcap.py --help\' for more info'
     sys.exit()
 
 def doh(error):
@@ -42,15 +42,15 @@ def doh(error):
 
 def interrupt_handler(signum, frame):
     print
-    print("Packet capture interrupted")
-    print "Done"
+    print('Packet capture interrupted')
+    print 'Done'
     sys.exit()
 
 def main():
     if len(sys.argv) == 1:
         usage()
     try:
-        opts,args = getopt.gnu_getopt(sys.argv[1:], "", ["trace","dir=","file=","nic=","node=","bpf=","chunk=","count=","help","list-interfaces"])
+        opts,args = getopt.gnu_getopt(sys.argv[1:], '', ['trace','dir=','file=','nic=','node=','bpf=','chunk=','count=','help','list-interfaces'])
     except getopt.GetoptError as error:
         print str(error)
         usage()
@@ -65,38 +65,38 @@ def main():
     count = 0
     chunk = 100
     for opt, arg in opts:
-        if opt == "--help":
+        if opt == '--help':
             example_usage()
-        elif opt == "--dir":
+        elif opt == '--dir':
             if pcap_file == None and nic == None:
                 pcap_dir = arg
             else:
                 fine_print()
-        elif opt == "--file":
+        elif opt == '--file':
             if pcap_dir == None and nic == None:
                 pcap_file = arg
             else:
                 fine_print()
-        elif opt == "--nic":
+        elif opt == '--nic':
             if pcap_file == None and pcap_dir == None:
                 nic = arg
             else:
                 fine_print()
-        elif opt == "--node":
+        elif opt == '--node':
             node = arg
-        elif opt == "--bpf":
+        elif opt == '--bpf':
             bpf = arg
-        elif opt == "--chunk":
+        elif opt == '--chunk':
             chunk = int(arg)
-        elif opt == "--count":
+        elif opt == '--count':
             count = int(arg)
-        elif opt == "--trace":
+        elif opt == '--trace':
             trace = True
-        elif opt == "--list-interfaces":
+        elif opt == '--list-interfaces':
             list_interfaces()
             sys.exit()
         else:
-            doh("Unhandled option "+opt)
+            doh('Unhandled option '+opt)
 
     # Bail if no nic or input file has been specified
     if nic == None and pcap_dir == None and pcap_file == None:
@@ -110,10 +110,10 @@ def main():
         files = os.listdir(pcap_dir)
         files.sort()
         for file in files:
-            if pcap_dir.find("/") > 0:
+            if pcap_dir.find('/') > 0:
                 pcap_files.append(pcap_dir+file)
             else:
-                pcap_files.append(pcap_dir+"/"+file)
+                pcap_files.append(pcap_dir+'/'+file)
         file_capture.capture(pcap_files, node, chunk, trace)
 
     # Handle only the given pcap file
@@ -125,6 +125,6 @@ def main():
     else:
         live_capture.capture(nic, bpf, node, chunk, count, trace)
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
-    print "Done"
+    print 'Done'

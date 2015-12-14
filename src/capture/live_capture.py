@@ -13,14 +13,14 @@ def index_packets(capture, sniff_date_utc, count):
         highest_protocol, layers = get_layers(packet)
         sniff_timestamp = float(packet.sniff_timestamp) # use this field for ordering the packets in ES
         action = {
-            "_op_type" : "index",
-            "_index" : "packets-"+sniff_date_utc.strftime("%Y-%m-%d"),
-            "_type" : "pcap_live",
-            "_source" : {
-                "sniff_date_utc" : sniff_date_utc.strftime("%Y-%m-%dT%H:%M:%S"),
-                "sniff_timestamp" : sniff_timestamp,
-                "protocol" : highest_protocol,
-                "layers" : layers
+            '_op_type' : 'index',
+            '_index' : 'packets-'+sniff_date_utc.strftime('%Y-%m-%d'),
+            '_type' : 'pcap_live',
+            '_source' : {
+                'sniff_date_utc' : sniff_date_utc.strftime('%Y-%m-%dT%H:%M:%S'),
+                'sniff_timestamp' : sniff_timestamp,
+                'protocol' : highest_protocol,
+                'layers' : layers
              }
         }
         yield action
@@ -31,13 +31,13 @@ def dump_packets(capture, sniff_date_utc, count): # count == 0 means no limit
     for packet in capture.sniff_continuously(packet_count=count):
         highest_protocol, layers = get_layers(packet)
         sniff_timestamp = float(packet.sniff_timestamp)
-        print "packet no.", pkt_no
-        print "* protocol        -", highest_protocol
-        print "* sniff date UTC  -", sniff_date_utc.strftime("%Y-%m-%dT%H:%M:%S")
-        print "* sniff timestamp -", sniff_timestamp
-        print "* layers"
+        print 'packet no.', pkt_no
+        print '* protocol        -', highest_protocol
+        print '* sniff date UTC  -', sniff_date_utc.strftime('%Y-%m-%dT%H:%M:%S')
+        print '* sniff timestamp -', sniff_timestamp
+        print '* layers'
         for key in layers:
-            print "\t", key, layers[key]
+            print '\t', key, layers[key]
         print
         pkt_no += 1
 
@@ -61,6 +61,6 @@ def capture(nic, bpf, node, chunk, count, trace):
             helpers.bulk(es,index_packets(capture, sniff_date_utc, count), chunk_size=chunk, raise_on_error=True)
 
     except Exception as e:
-        print "[ERROR] ", e
+        print '[ERROR] ', e
         if trace == True:
             traceback.print_exc(file=sys.stdout)
