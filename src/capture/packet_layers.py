@@ -51,7 +51,7 @@ def get_layers(packet):
             layers[layer.layer_name] = get_layer_fields(layer)
 
         # Transport layer - TCP, UDP, ICMP, IGMP, IDMP, or ESP
-        elif layer.layer_name == "tcp" or layer.layer_name == "udp" or layer.layer_name == "icmp" or layer.layer_name == "igmp" layer.layer_name == "idmp" or layer.layer_name == "esp":
+        elif layer.layer_name == "tcp" or layer.layer_name == "udp" or layer.layer_name == "icmp" or layer.layer_name == "igmp" or layer.layer_name == "idmp" or layer.layer_name == "esp":
             layers[layer.layer_name] = get_layer_fields(layer)
             if highest_protocol == "tcp" or highest_protocol == "udp" or highest_protocol == "icmp" or highest_protocol == "esp":
                 return highest_protocol, layers
