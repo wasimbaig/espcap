@@ -48,7 +48,7 @@ def dump_packets(capture, file_date_utc):
 def capture(pcap_files, node, chunk, trace):
     try:
         es = None
-        if (node != None):
+        if node != None:
             es = Elasticsearch(node)
 
         print "Loading packet capture file(s)"
@@ -62,9 +62,9 @@ def capture(pcap_files, node, chunk, trace):
             if node == None:
                 dump_packets(capture, file_date_utc)
             else:
-                helpers.bulk(es, index_packets(capture, pcap_file, file_date_utc), chunk_size=chunk, raise_on_error=False)
+                helpers.bulk(es, index_packets(capture, pcap_file, file_date_utc), chunk_size=chunk, raise_on_error=True)
 
     except Exception as e:
-        print "error: ", e
+        print "[ERROR] ", e
         if trace == True:
             traceback.print_exc(file=sys.stdout)

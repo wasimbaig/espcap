@@ -1,9 +1,10 @@
 import sys
 import traceback
+import pyshark
+
 from datetime import datetime
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
-import pyshark
 from packet_layers import get_layers
 
 # Index packets in Elasticsearch
@@ -57,9 +58,9 @@ def capture(nic, bpf, node, chunk, count, trace):
         if node == None:
             dump_packets(capture, sniff_date_utc, count)
         else:
-            helpers.bulk(es,index_packets(capture, sniff_date_utc, count), chunk_size=chunk, raise_on_error=False)
+            helpers.bulk(es,index_packets(capture, sniff_date_utc, count), chunk_size=chunk, raise_on_error=True)
 
     except Exception as e:
-        print "error: ", e
+        print "[ERROR] ", e
         if trace == True:
             traceback.print_exc(file=sys.stdout)
