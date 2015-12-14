@@ -17,7 +17,7 @@ def index_packets(capture, sniff_date_utc, count):
             "_index" : "packets-"+sniff_date_utc.strftime("%Y-%m-%d"),
             "_type" : "pcap_live",
             "_source" : {
-                "sniff_date_utc" : sniff_date_utc.strftime("%Y-%m-%d %H:%M:%S"),
+                "sniff_date_utc" : sniff_date_utc.strftime("%Y-%m-%dT%H:%M:%S"),
                 "sniff_timestamp" : sniff_timestamp,
                 "protocol" : highest_protocol,
                 "layers" : layers
@@ -33,7 +33,7 @@ def dump_packets(capture, sniff_date_utc, count): # count == 0 means no limit
         sniff_timestamp = float(packet.sniff_timestamp)
         print "packet no.", pkt_no
         print "* protocol        -", highest_protocol
-        print "* sniff date UTC  -", sniff_date_utc.strftime("%Y-%m-%d %H:%M:%S")
+        print "* sniff date UTC  -", sniff_date_utc.strftime("%Y-%m-%dT%H:%M:%S")
         print "* sniff timestamp -", sniff_timestamp
         print "* layers"
         for key in layers:

@@ -18,8 +18,8 @@ def index_packets(capture, pcap_file, file_date_utc):
             "_type" : "pcap_file",
             "_source" : {
                 "file_name" : pcap_file,
-                "file_date_utc" : file_date_utc.strftime("%Y-%m-%d %H:%M:%S"),
-                "sniff_date_utc" : datetime.utcfromtimestamp(sniff_timestamp).strftime("%Y-%m-%d %H:%M:%S"),
+                "file_date_utc" : file_date_utc.strftime("%Y-%m-%dT%H:%M:%S"),
+                "sniff_date_utc" : datetime.utcfromtimestamp(sniff_timestamp).strftime("%Y-%m-%dT%H:%M:%S"),
                 "sniff_timestamp" : sniff_timestamp,
                 "protocol" : highest_protocol,
                 "layers" : layers
@@ -35,8 +35,8 @@ def dump_packets(capture, file_date_utc):
         sniff_timestamp = float(packet.sniff_timestamp)
         print "packet no.", pkt_no
         print "* protocol        -", highest_protocol
-        print "* file date UTC   -", file_date_utc.strftime("%Y-%m-%d %H:%M:%S")
-        print "* sniff date UTC  -", datetime.utcfromtimestamp(sniff_timestamp).strftime("%Y-%m-%d %H:%M:%S")
+        print "* file date UTC   -", file_date_utc.strftime("%Y-%m-%dT%H:%M:%S")
+        print "* sniff date UTC  -", datetime.utcfromtimestamp(sniff_timestamp).strftime("%Y-%m-%dT%H:%M:%S")
         print "* sniff timestamp -", sniff_timestamp
         print "* layers"
         for key in layers:
