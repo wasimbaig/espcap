@@ -30,27 +30,31 @@ pip uninstall trollius
 pip install trollius==1.0.4
 pip install elasticsearch
 </pre>
-3. Create the packet index template by running scripts/templates.sh as follows 
+3. Clone the espcap repo.
+4. cd into the <tt>espcap/scripts</tt> directory.
+5. Create the packet index template by running scripts/templates.sh as follows 
 specifying the node IP address and TCP port (usually 9200) of your Elasticsearch 
 cluster. If your node IP address is 10.0.0.1 the commands would look like this:
 <pre>
-scripts/templates.sh 10.0.0.1:9200
+./templates.sh 10.0.0.1:9200
 </pre>
-4. Set the tshark_path variable in the pyshark/config.ini file.
-5. Run espcap.py as follows to index some packet data in Elasticsearch
+4. Set the tshark_path variable in the <tt>pyshark/config.ini</tt> file.
+5. cd into the <tt>espcap/src</tt> directory.
+6. Run <tt>espcap.py</tt> as follows to index some packet data in Elasticsearch
 <pre>
-espcap.py --dir=test_pcaps --node=10.0.0.1:9200
+./espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
 </pre>
-6. Run the packet_query.sh as follows to check that the packet data resides in your
+7. cd into the <tt>espcap/scripts</tt> directory.
+8. Run <tt>packet_query.sh as follows to check that the packet data resides in your
 Elasticsearch cluster:
 <pre>
-scripts/packet_query.sh 10.0.0.1:9200
+./packet_query.sh 10.0.0.1:9200
 </pre>
 
 ## Getting Started
 
-You run espcap.py as root. If you supply the <tt>--help</tt> flags on the command 
-line you'll get the information on the most useful ways to run espcap.py:
+You run <tt>espcap.py</tt> as root. If you supply the <tt>--help</tt> flags on the command 
+line you'll get the information on the most useful ways to run <tt>espcap.py</tt>:
 ```
 espcap.py [--dir=pcap_directory] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]
           [--file=pcap_file] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]
@@ -64,13 +68,14 @@ espcap.py --file=./pcap_file --node=localhost:9200 --chunk=1000
 espcap.py --nic=eth0 --node=localhost:9200 --bpf="tcp port 80" --chunk=2000
 espcap.py --nic=en0 --node=localhost:9200 --bpf="udp port 53" --count=500
 ```
-Note that each of these modes is mutually exclusive. If you try to run espcap.py in more 
+Note that each of these modes is mutually exclusive. If you try to run <tt>espcap.py</tt> in more 
 than one mode you'll get an error message.
 
-You can try espcap.py in file mode using the pcap files contained in test_pcaps. To do 
-that run espcap.py as follows (assuming you want to just dump the packets to stdout):
+You can try <tt>espcap.py</tt> in file mode using the pcap files contained in test_pcaps. To do 
+that run <tt>espcap.py</tt> from the <tt>espcap/src</tt> directory as follows (assuming you want to just 
+dump the packets to stdout):
 ```
-espcap.py --dir=./test_pcaps
+./espcap.py --dir=../test_pcaps
 ```
 When running in live capture mode you can set a maximum packet count after which the 
 capture will stop or you can just hit Ctrl-c to stop a continuous capture session. 
