@@ -18,7 +18,7 @@ def example_usage():
     command_line_options()
     print
     print "Example command line option combinations:"
-    print "espcap.py --d=/home/pcap_directory --node=localhost:9200"
+    print "espcap.py --dir=/home/pcap_directory --node=localhost:9200"
     print "espcap.py --file=./pcap_file --node=localhost:9200 --chunk=1000"
     print "espcap.py --nic=eth0 --node=localhost:9200 --bpf=\"tcp port 80\" --chunk=2000"
     print "espcap.py --nic=en0 --node=localhost:9200 --bpf=\"udp port 53\" --count=500"
