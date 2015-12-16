@@ -30,31 +30,28 @@ pip uninstall trollius
 pip install trollius==1.0.4
 pip install elasticsearch
 </pre>
-3. Clone the espcap repo.
-4. cd into the <tt>espcap/scripts</tt> directory.
-5. Create the packet index template by running scripts/templates.sh as follows 
+3. Clone the espcap repo then cd into the espcap directory.
+4. Create the packet index template by running scripts/templates.sh as follows 
 specifying the node IP address and TCP port (usually 9200) of your Elasticsearch 
 cluster. If your node IP address is 10.0.0.1 the commands would look like this:
 <pre>
-./templates.sh 10.0.0.1:9200
+espcap/scripts/templates.sh 10.0.0.1:9200
 </pre>
-4. Set the tshark_path variable in the <tt>pyshark/config.ini</tt> file.
-5. cd into the <tt>espcap/src</tt> directory.
+5. Set the tshark_path variable in the <tt>pyshark/config.ini</tt> file.
 6. Run <tt>espcap.py</tt> as follows to index some packet data in Elasticsearch
 <pre>
-./espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
+espcap/src/espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
 </pre>
-7. cd into the <tt>espcap/scripts</tt> directory.
-8. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your
+7. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your
 Elasticsearch cluster:
 <pre>
-./packet_query.sh 10.0.0.1:9200
+espcap/scripts/packet_query.sh 10.0.0.1:9200
 </pre>
 
 ## Getting Started
 
-After getting the Espcap code, cd into the espcap/src directory and su to root then run <tt>espcap.py</tt>
-from there. If you supply the <tt>--help</tt> flags on the command line you'll get the information on the 
+After getting the Espcap code then su to root then to run <tt>espcap.py</tt>. If you 
+supply the <tt>--help</tt> flags on the command line you'll get the information on the 
 how to run <tt>espcap.py</tt>:
 ```
 espcap.py [--dir=pcap_directory] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]
@@ -73,13 +70,13 @@ Note that each of these modes is mutually exclusive. If you try to run <tt>espca
 than one mode you'll get an error message.
 
 You can try <tt>espcap.py</tt> in file mode using the pcap files contained in test_pcaps. To do 
-that run <tt>espcap.py</tt> from the <tt>espcap/src</tt> directory as follows (assuming you want to 
-just dump the packets to stdout):
+that run <tt>espcap.py</tt> from the <tt>espcap/src</tt> directory as follows (assuming you want 
+to just dump the packets to stdout):
 ```
-./espcap.py --dir=../test_pcaps
+espcap.py --dir=../test_pcaps
 ```
-When running in live capture mode you can set a maximum packet count after which the 
-capture will stop or you can just hit Ctrl-c to stop a continuous capture session. 
+When running in live capture mode you can set a maximum packet count after which the capture 
+will stop or you can just hit Ctrl-c to stop a continuous capture session. 
 
 __Espcap__ uses Elasticsearch bulk insertion of packets. The <tt>--chunk</tt> enables you to set 
 how many packets are sent Elasticsearch for each insertion. The default is chunk size is 100,
@@ -92,16 +89,15 @@ flag for either file or live capture modes.
 
 ## Packet Indexing
 
-When indexing packet captures into Elasticsearch, an new index is created for each 
-day. The index naming format is <i>packets-yyyy-mm-dd</i>. The date is UTC derived from 
-the packet sniff timestamp obtained from pyshark either for live captures or the
-sniff timestamp read from pcap files. Each index has two types, one for live capture 
-<tt>pcap_live</tt> and file capture <tt>pcap_file</tt>. Both types are dynamically mapped by
-Elasticsearch with exception of the date fields for either <tt>pcap_file</tt> or <tt>pcap_live</tt>
-types which are mapped as Elasticsearch date fields if you run the templates.sh script
-before indexing an packet data.
+When indexing packet captures into Elasticsearch, an new index is created for each day. The 
+index naming format is <i>packets-yyyy-mm-dd</i>. The date is UTC derived from the packet sniff 
+timestamp obtained from pyshark either for live captures or the sniff timestamp read from pcap 
+files. Each index has two types, one for live capture <tt>pcap_live</tt> and file capture <tt>pcap_file</tt>. 
+Both types are dynamically mapped by Elasticsearch with exception of the date fields for either 
+<tt>pcap_file</tt> or <tt>pcap_live</tt> types which are mapped as Elasticsearch date fields if 
+you run the templates.sh script before indexing an packet data.
 
-Index IDs are automatically assigned by Elasticsearch
+Index IDs are automatically assigned by Elasticsearch.
 
 ### pcap_file type fields
 
