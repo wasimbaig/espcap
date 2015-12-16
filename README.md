@@ -53,8 +53,9 @@ Elasticsearch cluster:
 
 ## Getting Started
 
-You run <tt>espcap.py</tt> as root. If you supply the <tt>--help</tt> flags on the command 
-line you'll get the information on the most useful ways to run <tt>espcap.py</tt>:
+After getting the Espcap code, cd into the espcap/src directory and su to root then run <tt>espcap.py</tt>
+from there. If you supply the <tt>--help</tt> flags on the command line you'll get the information on the 
+how to run <tt>espcap.py</tt>:
 ```
 espcap.py [--dir=pcap_directory] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]
           [--file=pcap_file] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]
