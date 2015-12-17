@@ -50,13 +50,14 @@ espcap/scripts/packet_query.sh 10.0.0.1:9200
 
 ## Getting Started
 
-After getting the Espcap code then su to root then to run <tt>espcap.py</tt>. If you 
-supply the <tt>--help</tt> flags on the command line you'll get the information on the 
-how to run <tt>espcap.py</tt>:
-```
+After getting the Espcap code, su to root to run <tt>espcap.py</tt>. Here are some
+examples of running the script.
+
++ Display help message
+<pre>
+espcap.py --help
 Usage: espcap.py [OPTIONS]
-```
-```
+
 Options:
   --node TEXT      Elasticsearch IP and port (default=None, dump packets to
                    stdout)
@@ -70,27 +71,37 @@ Options:
                    (default=infinite)
   --list           List the network interfaces
   --help           Show this message and exit.
-```
-Note that each of these modes is mutually exclusive. If you try to run <tt>espcap.py</tt> in more 
-than one mode you'll get an error message.
-
-You can try <tt>espcap.py</tt> in file mode using the pcap files contained in test_pcaps. To do 
-that run <tt>espcap.py</tt> from the <tt>espcap/src</tt> directory as follows (assuming you want 
-to just dump the packets to stdout):
-```
-espcap.py --dir=../test_pcaps
-```
-When running in live capture mode you can set a maximum packet count after which the capture 
-will stop or you can just hit Ctrl-c to stop a continuous capture session. 
+</pre>
++ Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming you your present working directory is espcap/src
+<pre>
+espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
+</pre>
++ Same as the previous except load the test_pcaps/test_http.pcap
+<pre>
+espcap.py --file=../test_pcaps/test_http.pcap --node=10.0.0.1:9200
+</pre>
++ Do a live capture from the network interface <tt>eth0</tt>, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200
+<pre>
+espcap.py --nic=eth0 --node=10.0.0.1:9200
+</pre>
++ Same as the previous excpet dump the packets to stdout
+<pre>
+espcap.py --nic=eth0
+</pre>
++ Same as the previous except get only TCP packets with source port or destination port == 80
+<pre>
+espcap.py --nic=eth0 --bpf='tcp port 80'
+</pre>
++ List the network interfaces
+<pre>
+espcap.py --list
+</pre>
 
 __Espcap__ uses Elasticsearch bulk insertion of packets. The <tt>--chunk</tt> enables you to set 
 how many packets are sent Elasticsearch for each insertion. The default is chunk size is 100,
 but higher values (1000 - 2000) are usually better. If you get transport I/O exceptions due
 to network latency or an Elasticsearch backend that is not optimally configured, stick with
 the default chunk size.
-
-If you want to get more information when exceptions are raised you can supply the <tt>--trace</tt>
-flag for either file or live capture modes.
 
 ## Packet Indexing
 
