@@ -23,30 +23,27 @@ learning.  You can download Anaconda Python here: http://continuum.io/downloads.
 
 1. Install Wireshark for your OS.</li>
 2. Install Pyshark, trollius, and the Elasticsearch client for Python with pip:
-```
+<pre>
 pip uninstall pyshark
 pip install pyshark==0.3.5
 pip uninstall trollius
 pip install trollius==1.0.4
 pip install elasticsearch
-```
+</pre>
 3. Clone the espcap repo then cd into the espcap directory.
-4. Create the packet index template by running scripts/templates.sh as follows 
-specifying the node IP address and TCP port (usually 9200) of your Elasticsearch 
-cluster. If your node IP address is 10.0.0.1 the commands would look like this:
-```
-espcap/scripts/templates.sh 10.0.0.1:9200
-```
+4. Create the packet index template by running scripts/templates.sh as follows specifying the node IP address and TCP port of yoru Elasticsearch instance (localhost:9200 in this example):
+<pre>
+scripts/templates.sh localhost:9200
+</pre>
 5. Set the tshark_path variable in the <tt>pyshark/config.ini</tt> file.
-6. Run <tt>espcap.py</tt> as follows to index some packet data in Elasticsearch
-```
-espcap/src/espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
-```
-7. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your
-Elasticsearch cluster:
-```
-espcap/scripts/packet_query.sh 10.0.0.1:9200
-```
+6. Run <tt>espcap.py</tt> to index some packet data in Elasticsearch:
+<pre>
+src/espcap.py --file=test_pcaps/test_http.pcap --node=localhost:9200
+</pre>
+7. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your Elasticsearch instance:
+<pre>
+scripts/packet_query.sh localhost:9200
+</pre
 
 ## Running Examples
 
@@ -130,10 +127,10 @@ The <tt>pcap_live</tt> type is comprised of the same fields except the <i>file_n
 
 Packet layers are mapped in four basic sections based in protocol type within each index:
 
-1. Link - link to the physical network media, usually Ethernet (eth).
-2. Network - network routing layer which is always IP (ip).
-3. Transport - transport layer which is either TCP (tcp) or UDP (udp).
-4. Application - high level Internet protocol such as HTTP (http), DNS (dns), etc.
++ Link - link to the physical network media, usually Ethernet (eth).
++ Network - network routing layer which is always IP (ip).
++ Transport - transport layer which is either TCP (tcp) or UDP (udp).
++ Application - high level Internet protocol such as HTTP (http), DNS (dns), etc.
 
 Packet layers reside in a JSON section called <tt>layers</tt>. Each of the layers reside in a 
 JSON that has the name of the protocol for that layer. The highest protocol for the whole packet, 
