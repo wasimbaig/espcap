@@ -48,15 +48,13 @@ Elasticsearch cluster:
 espcap/scripts/packet_query.sh 10.0.0.1:9200
 ```
 
-## Getting Started
-
-After getting the Espcap code, su to root to run <tt>espcap.py</tt>. Here are some examples of running the script.
+## Running Examples
 
 - Display help message
 ```
 espcap.py --help
 ```
-  which outputs
+which outputs the following:
 ```
 Usage: espcap.py [OPTIONS]
 ```
@@ -75,25 +73,25 @@ Options:
   --list           List the network interfaces
   --help           Show this message and exit.
 ```
-+ Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming you your present working directory is espcap/src
++ Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming your present working directory is espcap/src:
 ```
 espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
 ```
-+ Same as the previous except load the test_pcaps/test_http.pcap
++ Same as the previous except load the test_pcaps/test_http.pcap file:
 ```
 espcap.py --file=../test_pcaps/test_http.pcap --node=10.0.0.1:9200
 ```
-+ Do a live capture from the network interface <tt>eth0</tt>, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200
++ Do a live capture from the network interface <tt>eth0</tt>, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200:
 ```
 espcap.py --nic=eth0 --node=10.0.0.1:9200
 ```
-+ Same as the previous except dump the packets to stdout
++ Same as the previous except dump the packets to stdout:
 ```
 espcap.py --nic=eth0 
 ```
-+ Do a live capture of TCP packets with source port or destination port == 80 and dump to stdout
++ Do a live capture of TCP packets with source port or destination port == 80 and index in Elasticsearch running at 10.0.0.1:9200:
 ```
-espcap.py --nic=eth0 --bpf='tcp port 80'
+espcap.py --nic=eth0 --bpf='tcp port 80' --node=10.0.0.1:9200
 ```
 + List the network interfaces
 ```
