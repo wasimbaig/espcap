@@ -54,17 +54,22 @@ After getting the Espcap code then su to root then to run <tt>espcap.py</tt>. If
 supply the <tt>--help</tt> flags on the command line you'll get the information on the 
 how to run <tt>espcap.py</tt>:
 ```
-espcap.py [--dir=pcap_directory] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]
-          [--file=pcap_file] [--node=elasticsearch_host] [--chunk=chunk_size] [--trace]
-          [--nic=interface] [--node=elasticsearch_host] [--bpf=packet_filter_string] [--chunk=chunk_size] [--count=max_packets] [--trace]
-          [--help]
-          [--list-interfaces]
-
-Example command line option combinations:
-espcap.py --dir=/home/pcap_direcory --node=localhost:9200
-espcap.py --file=./pcap_file --node=localhost:9200 --chunk=1000
-espcap.py --nic=eth0 --node=localhost:9200 --bpf="tcp port 80" --chunk=2000
-espcap.py --nic=en0 --node=localhost:9200 --bpf="udp port 53" --count=500
+Usage: espcap.py [OPTIONS]
+```
+```
+Options:
+  --node TEXT      Elasticsearch IP and port (default=None, dump packets to
+                   stdout)
+  --nic TEXT       Network interface for live capture (default=None, if file
+                   or dir specified)
+  --file TEXT      PCAP file for file capture (default=None, if nic specified)
+  --dir TEXT       PCAP file for file capture (default=None, if nic specified)
+  --bpf TEXT       Packet filter for live capture (default=all packets)
+  --chunk INTEGER  Number of packets to bulk index (default=1000)
+  --count INTEGER  Number of packets to capture during live capture
+                   (default=infinite)
+  --list           List the network interfaces
+  --help           Show this message and exit.
 ```
 Note that each of these modes is mutually exclusive. If you try to run <tt>espcap.py</tt> in more 
 than one mode you'll get an error message.
