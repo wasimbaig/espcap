@@ -23,41 +23,44 @@ learning.  You can download Anaconda Python here: http://continuum.io/downloads.
 
 1. Install Wireshark for your OS.</li>
 2. Install Pyshark, trollius, and the Elasticsearch client for Python with pip:
-<pre>
+```
 pip uninstall pyshark
 pip install pyshark==0.3.5
 pip uninstall trollius
 pip install trollius==1.0.4
 pip install elasticsearch
-</pre>
+```
 3. Clone the espcap repo then cd into the espcap directory.
 4. Create the packet index template by running scripts/templates.sh as follows 
 specifying the node IP address and TCP port (usually 9200) of your Elasticsearch 
 cluster. If your node IP address is 10.0.0.1 the commands would look like this:
-<pre>
+```
 espcap/scripts/templates.sh 10.0.0.1:9200
-</pre>
+```
 5. Set the tshark_path variable in the <tt>pyshark/config.ini</tt> file.
 6. Run <tt>espcap.py</tt> as follows to index some packet data in Elasticsearch
-<pre>
+```
 espcap/src/espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
-</pre>
+```
 7. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your
 Elasticsearch cluster:
-<pre>
+```
 espcap/scripts/packet_query.sh 10.0.0.1:9200
-</pre>
+```
 
 ## Getting Started
 
-After getting the Espcap code, su to root to run <tt>espcap.py</tt>. Here are some
-examples of running the script.
+After getting the Espcap code, su to root to run <tt>espcap.py</tt>. Here are some examples of running the script.
 
-+ Display help message
-<pre>
+- Display help message
+```
 espcap.py --help
+```
+  which outputs
+```
 Usage: espcap.py [OPTIONS]
-
+```
+```
 Options:
   --node TEXT      Elasticsearch IP and port (default=None, dump packets to
                    stdout)
@@ -71,37 +74,31 @@ Options:
                    (default=infinite)
   --list           List the network interfaces
   --help           Show this message and exit.
-</pre>
+```
 + Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming you your present working directory is espcap/src
-<pre>
+```
 espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
-</pre>
+```
 + Same as the previous except load the test_pcaps/test_http.pcap
-<pre>
+```
 espcap.py --file=../test_pcaps/test_http.pcap --node=10.0.0.1:9200
-</pre>
+```
 + Do a live capture from the network interface <tt>eth0</tt>, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200
-<pre>
+```
 espcap.py --nic=eth0 --node=10.0.0.1:9200
-</pre>
-+ Same as the previous excpet dump the packets to stdout
-<pre>
-espcap.py --nic=eth0
-</pre>
-+ Same as the previous except get only TCP packets with source port or destination port == 80
-<pre>
+```
++ Same as the previous except dump the packets to stdout
+```
+espcap.py --nic=eth0 
+```
++ Do a live capture of TCP packets with source port or destination port == 80 and dump to stdout
+```
 espcap.py --nic=eth0 --bpf='tcp port 80'
-</pre>
+```
 + List the network interfaces
-<pre>
+```
 espcap.py --list
-</pre>
-
-__Espcap__ uses Elasticsearch bulk insertion of packets. The <tt>--chunk</tt> enables you to set 
-how many packets are sent Elasticsearch for each insertion. The default is chunk size is 100,
-but higher values (1000 - 2000) are usually better. If you get transport I/O exceptions due
-to network latency or an Elasticsearch backend that is not optimally configured, stick with
-the default chunk size.
+```
 
 ## Packet Indexing
 
