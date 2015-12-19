@@ -287,15 +287,14 @@ checking the <tt>envelope</tt> field contents.
 
 ## Protocol Support
 
-Technically epscap recognizes all the protocols supported by wireshark/tshark. However, the wireshark
+Technically __Espcap__ recognizes all the protocols supported by wireshark/tshark. However, the wireshark
 dissector set includes some strange protocols that are not really Internet protocols in the strictest
 sense, but are rather parts of other protocols. One example is <tt>media</tt> which is actually used to
-label an additional layer for the <tt>http</tt> protocol among other things. __Espcap__ uses the 
-<tt>protocols.list</tt> to help determine the application level protocol in any given packet. This file 
-is derived from tshark by running the <tt>protocols.sh</tt> script in the <tt>conf</tt> directory. To 
-ensure that __Espcap__ has only true Internet protocols to choose from, the entries in <tt>protocols.list</tt> 
-that are not truly Internet protocols have been commented out. Currently the commented out protocols 
-include the following:
+label an additional layer for the <tt>http</tt> protocol among other things. __Espcap__ uses the <tt>protocols.list</tt> 
+to help determine the application level protocol in any given packet. This file is derived from tshark by 
+running the <tt>protocols.sh</tt> script in the <tt>conf</tt> directory. To ensure that __Espcap__ has only 
+true Internet protocols to choose from, the entries in <tt>protocols.list</tt> that are not truly Internet 
+protocols have been commented out. Currently the commented out protocols include the following:
 ```
 _ws.expert
 _ws.lua
