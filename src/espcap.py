@@ -199,7 +199,7 @@ def interrupt_handler(signum, frame):
 @click.option('--dir', default=None, help='PCAP file directory for file capture (default=None, if nic specified)')
 @click.option('--bpf', default=None, help='Packet filter for live capture (default=all packets)')
 @click.option('--chunk', default=1000, help='Number of packets to bulk index (default=1000)')
-@click.option('--count', default=0, help='Number of packets to capture during live capture (default=infinite)')
+@click.option('--count', default=0, help='Number of packets to capture during live capture (default=0, capture indefinitely)')
 @click.option('--list', is_flag=True, help='List the network interfaces')
 def main(node, nic, file, dir, bpf, chunk, count, list):
     if list:
