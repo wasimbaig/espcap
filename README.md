@@ -66,7 +66,7 @@ Options:
   --bpf TEXT       Packet filter for live capture (default=all packets)
   --chunk INTEGER  Number of packets to bulk index (default=1000)
   --count INTEGER  Number of packets to capture during live capture
-                   (default=default=0, capture indefinitely))
+                   (default=default=0, capture indefinitely)
   --list           List the network interfaces
   --help           Show this message and exit.
 ```
