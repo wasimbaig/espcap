@@ -132,9 +132,9 @@ Packet layers are mapped in four basic sections based in protocol type within ea
 + Transport - transport layer which is either TCP (tcp) or UDP (udp).
 + Application - high level Internet protocol such as HTTP (http), DNS (dns), etc.
 
-Packet layers reside in a JSON section called <tt>layers</tt>. Each of the layers reside in a 
-JSON that has the name of the protocol for that layer. The highest protocol for the whole packet, 
-which is the application protocol if the packet has such a layer, is indicate by the <tt>protocol</tt> 
+Packet layers reside in a JSON section called <tt>layers</tt>. Each of the layers reside in a JSON 
+that has the name of the protocol for that layer. The highest protocol for the whole packet, which 
+is the application protocol if the packet has such a layer, is indicate by the <tt>protocol</tt> 
 field that is at the sam level as the <tt>layers</tt> section.
 
 Below is an example of an HTTP packet as indexed in Elasticsearch.
@@ -290,11 +290,12 @@ checking the <tt>envelope</tt> field contents.
 Technically epscap recognizes all the protocols supported by wireshark/tshark. However, the wireshark
 dissector set includes some strange protocols that are not really Internet protocols in the strictest
 sense, but are rather parts of other protocols. One example is <tt>media</tt> which is actually used to
-label an additional layer for the <tt>http</tt> protocol among other things. __Espcap__ uses the protocols.list
-to help determine the application level protocol in any given packet. This file is derived from tshark
-by running the protocols.sh script in the conf directory. To ensure that __Espcap__ has only true Internet
-protocols to choose from, the entries in protocols.list that are not truly Internet protocols have
-been commented out. Currently the commented out protocols include the following:
+label an additional layer for the <tt>http</tt> protocol among other things. __Espcap__ uses the 
+<tt>protocols.list</tt> to help determine the application level protocol in any given packet. This file 
+is derived from tshark by running the <tt>protocols.sh</tt> script in the <tt>conf</tt> directory. To 
+ensure that __Espcap__ has only true Internet protocols to choose from, the entries in <tt>protocols.list</tt> 
+that are not truly Internet protocols have been commented out. Currently the commented out protocols 
+include the following:
 ```
 _ws.expert
 _ws.lua
@@ -318,12 +319,11 @@ If there are any other protocols you believe should not be considered, then you 
 this fashion. 
 
 On the other hand If you get a little too frisky and comment out too many protocols or you just want to 
-generate a fresh list, you can run the protocols.sh script in the following manner:
+generate a fresh list, do the following:
 
-1. cd to the conf/ directory
-2. Run the protocols.sh script which produces a clean protocol list in protocols.txt.
-3. Comment out the protocols in the list above and others you don't want to consider.
-4. Replace the contents of protocols.list with the contents of protocols.txt.
+1. Run <tt>protocols.sh</tt> script which produces a clean protocol list in <tt>protocols.txt</tt>.
+2. Comment out the protocols in the list above and others you don't want to consider.
+3. Replace the contents of <tt>protocols.list</tt> with the contents of <tt>protocols.txt</tt>.
 
 ### Known Issues
 
