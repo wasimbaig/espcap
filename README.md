@@ -319,9 +319,9 @@ If there are any other protocols you believe should not be considered, then you 
 this fashion. 
 
 On the other hand If you get a little too frisky and comment out too many protocols or you just want to 
-generate a fresh list, you can run the <tt>protocols.sh</tt> script in the following manner:
+generate a fresh list, do the following:
 
-1. Run the <tt>protocols.sh</tt> script which produces a clean protocol list in <tt>protocols.txt</tt>.
+1. Run <tt>protocols.sh</tt> script which produces a clean protocol list in <tt>protocols.txt</tt>.
 2. Comment out the protocols in the list above and others you don't want to consider.
 3. Replace the contents of <tt>protocols.list</tt> with the contents of <tt>protocols.txt</tt>.
 
