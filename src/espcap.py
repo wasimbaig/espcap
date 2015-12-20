@@ -97,6 +97,7 @@ def get_layers(packet):
 
 # Index packets in Elasticsearch
 def index_packets(capture, pcap_file, file_date_utc):
+    pkt_no = 1
     for packet in capture:
         highest_protocol, layers = get_layers(packet)
         sniff_timestamp = float(packet.sniff_timestamp) # use this field for ordering the packets in ES
@@ -114,14 +115,17 @@ def index_packets(capture, pcap_file, file_date_utc):
             }
         }
         yield action
+        pkt_no += 1
+        if pkt_no > count:
+            return
 
 # Dump raw packets to stdout
-def dump_packets(capture, file_date_utc):
+def dump_packets(capture, file_date_utc, count):
     pkt_no = 1
     for packet in capture:
         highest_protocol, layers = get_layers(packet)
         sniff_timestamp = float(packet.sniff_timestamp)
-        print 'packet no.', pkt_no
+        print 'Packet no.', pkt_no
         print '* protocol        -', highest_protocol
         print '* file date UTC   -', file_date_utc.strftime('%Y-%m-%dT%H:%M:%S')
         print '* sniff date UTC  -', datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%dT%H:%M:%S')
@@ -131,6 +135,8 @@ def dump_packets(capture, file_date_utc):
             print '\t', key, layers[key]
         print
         pkt_no += 1
+        if count != 0 and pkt_no > count:
+            return
 
 # Live capture function
 def live_capture(nic, bpf, node, chunk, count):
@@ -149,7 +155,7 @@ def live_capture(nic, bpf, node, chunk, count):
         if node == None:
             dump_packets(capture, sniff_date_utc, count)
         else:
-            helpers.bulk(es,index_packets(capture, sniff_date_utc, count), chunk_size=chunk, raise_on_error=True)
+            helpers.bulk(es.index_packets(capture, sniff_date_utc, count), chunk_size=chunk, raise_on_error=True)
 
     except Exception as e:
         print '[ERROR] ', e
@@ -170,7 +176,7 @@ def file_capture(pcap_files, node, chunk):
 
             # If no Elasticsearch node specified, dump to stdout
             if node == None:
-                dump_packets(capture, file_date_utc)
+                dump_packets(capture, file_date_utc, 0)
             else:
                 helpers.bulk(es, index_packets(capture, pcap_file, file_date_utc), chunk_size=chunk, raise_on_error=True)
 
