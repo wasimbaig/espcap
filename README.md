@@ -64,7 +64,7 @@ Options:
   --nic TEXT       Network interface for live capture (default=None, if file
                    or dir specified)
   --file TEXT      PCAP file for file capture (default=None, if nic specified)
-  --dir TEXT       PCAP file for file capture (default=None, if nic specified)
+  --dir TEXT       PCAP directory for multiple file capture (default=None, if nic specified)
   --bpf TEXT       Packet filter for live capture (default=all packets)
   --chunk INTEGER  Number of packets to bulk index (default=1000)
   --count INTEGER  Number of packets to capture during live capture

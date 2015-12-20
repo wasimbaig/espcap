@@ -202,7 +202,7 @@ def interrupt_handler(signum, frame):
 @click.option('--node', default=None, help='Elasticsearch IP and port (default=None, dump packets to stdout)')
 @click.option('--nic', default=None, help='Network interface for live capture (default=None, if file or dir specified)')
 @click.option('--file', default=None, help='PCAP file for file capture (default=None, if nic specified)')
-@click.option('--dir', default=None, help='PCAP file directory for file capture (default=None, if nic specified)')
+@click.option('--dir', default=None, help='PCAP directory for multiple file capture (default=None, if nic specified)')
 @click.option('--bpf', default=None, help='Packet filter for live capture (default=all packets)')
 @click.option('--chunk', default=1000, help='Number of packets to bulk index (default=1000)')
 @click.option('--count', default=0, help='Number of packets to capture during live capture (default=0, capture indefinitely)')
