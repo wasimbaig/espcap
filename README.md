@@ -99,6 +99,8 @@ espcap.py --list
 
 ## Packet Indexing
 
+### Time Series Indexing
+
 When indexing packet captures into Elasticsearch, an new index is created for each day. The 
 index naming format is <i>packets-yyyy-mm-dd</i>. The date is UTC derived from the packet sniff 
 timestamp obtained from pyshark either for live captures or the sniff timestamp read from pcap 
