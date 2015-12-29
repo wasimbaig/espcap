@@ -96,7 +96,7 @@ def get_layers(packet):
     return highest_protocol, layers
 
 # Index packets in Elasticsearch
-def index_packets(capture, pcap_file, file_date_utc):
+def index_packets(capture, pcap_file, file_date_utc, count):
     pkt_no = 1
     for packet in capture:
         highest_protocol, layers = get_layers(packet)
@@ -116,7 +116,7 @@ def index_packets(capture, pcap_file, file_date_utc):
         }
         yield action
         pkt_no += 1
-        if pkt_no > count:
+        if count > 0 and t_no > count:
             return
 
 # Dump raw packets to stdout
@@ -135,7 +135,7 @@ def dump_packets(capture, file_date_utc, count):
             print '\t', key, layers[key]
         print
         pkt_no += 1
-        if count != 0 and pkt_no > count:
+        if count > 0 and pkt_no > count:
             return
 
 # Live capture function
@@ -178,7 +178,7 @@ def file_capture(pcap_files, node, chunk):
             if node == None:
                 dump_packets(capture, file_date_utc, 0)
             else:
-                helpers.bulk(es, index_packets(capture, pcap_file, file_date_utc), chunk_size=chunk, raise_on_error=True)
+                helpers.bulk(es, index_packets(capture, pcap_file, file_date_utc, 0), chunk_size=chunk, raise_on_error=True)
 
     except Exception as e:
         print '[ERROR] ', e
