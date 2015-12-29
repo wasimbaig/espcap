@@ -45,7 +45,7 @@ src/espcap.py --file=test_pcaps/test_http.pcap --node=localhost:9200
 7. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your Elasticsearch instance:
 <pre>
 scripts/packet_query.sh localhost:9200
-</pre
+</pre>
 
 ## Running Examples
 
