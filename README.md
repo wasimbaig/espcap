@@ -52,50 +52,50 @@ scripts/packet_query.sh localhost:9200
 
 - Display help message
 ```
-espcap.py --help
+  espcap.py --help
 ```
 which outputs the following:
 ```
-Usage: espcap.py [OPTIONS]
+  Usage: espcap.py [OPTIONS]
 ```
 ```
-Options:
-  --node TEXT      Elasticsearch IP and port (default=None, dump packets to
-                   stdout)
-  --nic TEXT       Network interface for live capture (default=None, if file
-                   or dir specified)
-  --file TEXT      PCAP file for file capture (default=None, if nic specified)
-  --dir TEXT       PCAP directory for multiple file capture (default=None, if nic specified)
-  --bpf TEXT       Packet filter for live capture (default=all packets)
-  --chunk INTEGER  Number of packets to bulk index (default=1000)
-  --count INTEGER  Number of packets to capture during live capture
-                   (default=0, capture indefinitely)
-  --list           List the network interfaces
-  --help           Show this message and exit.
+  Options:
+    --node TEXT      Elasticsearch IP and port (default=None, dump packets to
+                     stdout)
+    --nic TEXT       Network interface for live capture (default=None, if file
+                     or dir specified)
+    --file TEXT      PCAP file for file capture (default=None, if nic specified)
+    --dir TEXT       PCAP directory for multiple file capture (default=None, if nic specified)
+    --bpf TEXT       Packet filter for live capture (default=all packets)
+    --chunk INTEGER  Number of packets to bulk index (default=1000)
+    --count INTEGER  Number of packets to capture during live capture
+                    (default=0, capture indefinitely)
+    --list           List the network interfaces
+    --help           Show this message and exit.
 ```
 + Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming your present working directory is espcap/src:
 ```
-espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
+  espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
 ```
 + Same as the previous except load the test_pcaps/test_http.pcap file:
 ```
-espcap.py --file=../test_pcaps/test_http.pcap --node=10.0.0.1:9200
+  espcap.py --file=../test_pcaps/test_http.pcap --node=10.0.0.1:9200
 ```
 + Do a live capture from the network interface <tt>eth0</tt>, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200:
 ```
-espcap.py --nic=eth0 --node=10.0.0.1:9200
+  espcap.py --nic=eth0 --node=10.0.0.1:9200
 ```
 + Same as the previous except dump the packets to stdout:
 ```
-espcap.py --nic=eth0 
+  espcap.py --nic=eth0 
 ```
 + Do a live capture of TCP packets with source port or destination port == 80 and index in Elasticsearch running at 10.0.0.1:9200:
 ```
-espcap.py --nic=eth0 --bpf='tcp port 80' --node=10.0.0.1:9200
+  espcap.py --nic=eth0 --bpf='tcp port 80' --node=10.0.0.1:9200
 ```
 + List the network interfaces
 ```
-espcap.py --list
+  espcap.py --list
 ```
 
 ## Packet Indexing
