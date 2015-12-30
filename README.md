@@ -56,6 +56,7 @@ pip install click
 ## Running Examples
 
 - Display the following help message:
+  
   ```
   espcap.py --help
   Usage: espcap.py [OPTIONS]
@@ -74,27 +75,39 @@ pip install click
     --list           List the network interfaces
     --help           Show this message and exit.
   ```
+  
 + Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming your present working directory is espcap/src:
++ 
   ```
   espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
   ```
+  
 + Same as the previous except load the test_pcaps/test_http.pcap file:
+  
   ```
   espcap.py --file=../test_pcaps/test_http.pcap --node=10.0.0.1:9200
   ```
+  
 + Do a live capture from the network interface <tt>eth0</tt>, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200:
+  
   ```
   espcap.py --nic=eth0 --node=10.0.0.1:9200
   ```
+  
 + Same as the previous except dump the packets to stdout:
+  
   ```
   espcap.py --nic=eth0 
   ```
+  
 + Do a live capture of TCP packets with source port or destination port == 80 and index in Elasticsearch running at 10.0.0.1:9200:
+  
   ```
   espcap.py --nic=eth0 --bpf='tcp port 80' --node=10.0.0.1:9200
   ```
+  
 + List the network interfaces
+  
   ```
   espcap.py --list 
   ```
@@ -301,6 +314,7 @@ to help determine the application level protocol in any given packet. This file 
 running the <tt>protocols.sh</tt> script in the <tt>conf</tt> directory. To ensure that __Espcap__ has only 
 true Internet protocols to choose from, the entries in <tt>protocols.list</tt> that are not truly Internet 
 protocols have been commented out. Currently the commented out protocols include the following:
+
 ```
 _ws.expert
 _ws.lua
@@ -320,6 +334,7 @@ png
 xml
 zip
 ```
+
 If there are any other protocols you believe should not be considered, then you can comment them out in 
 this fashion. 
 
@@ -332,14 +347,5 @@ generate a fresh list, do the following:
 
 ### Known Issues
 
-1. When uploading packet data through the Nginx proxy you may get a <tt>413 Request Entity Too Large</tt> error. This is caused by sending too many packets at each Elasticsearch bulk load call. You can either set the chunk size with the <tt>--chunk</tt> or increase the request entity size that Nginx will accept or both. To set a larger Nginx request entity limit add this line to the http or server or location sections of your Nginx configuration file: 
-  
-  ```
-  client_max_body_size     2M;
-  ```
-  
-Set the value to your desired maximum entity (body) size then restart Nginx with this command:
-  
-  ```
-  /usr/local/nginx/sbin/nginx -s reload
-  ```
+1. It appears that __Espcap__ does not work with Python versions less than 2.7.10.
+2. __Espcap__ has not yet been tested on Python 3.x.
