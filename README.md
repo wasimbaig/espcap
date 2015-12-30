@@ -50,15 +50,11 @@ scripts/packet_query.sh localhost:9200
 
 ## Running Examples
 
-- Display help message
+- Display the following help message:
 ```
   espcap.py --help
-```
-which outputs the following:
-```
   Usage: espcap.py [OPTIONS]
-```
-```
+  
   Options:
     --node TEXT      Elasticsearch IP and port (default=None, dump packets to
                      stdout)
