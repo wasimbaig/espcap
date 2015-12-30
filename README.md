@@ -263,8 +263,8 @@ Below is an example of an HTTP packet as indexed in Elasticsearch.
         "protocol": "http",
         "sniff_timestamp": 1438233732.662099,
         "file_name": "../test_pcaps/test_http.pcap",
-        "sniff_date_utc": "2015-07-30 05:22:12",
-        "file_date_utc": "2015-09-23 01:41:26"
+        "sniff_date_utc": "2015-07-30T05:22:12+0000",
+        "file_date_utc": "2015-09-23T01:41:26+0000"
     }
 }
 ```
