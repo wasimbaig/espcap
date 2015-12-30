@@ -35,15 +35,20 @@ pip install click
 </pre>
 3. Clone the espcap repo then cd into the espcap directory.
 4. Create the packet index template by running scripts/templates.sh as follows specifying the node IP address and TCP port of yoru Elasticsearch instance (localhost:9200 in this example):
+
   ```
   scripts/templates.sh localhost:9200
   ```
+  
 5. Set the tshark_path variable in the <tt>pyshark/config.ini</tt> file.
 6. Run <tt>espcap.py</tt> to index some packet data in Elasticsearch:
+  
   ```
   src/espcap.py --file=test_pcaps/test_http.pcap --node=localhost:9200
   ```
+  
 7. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your Elasticsearch instance:
+  
   ```
   scripts/packet_query.sh localhost:9200
   ```
@@ -328,10 +333,13 @@ generate a fresh list, do the following:
 ### Known Issues
 
 1. When uploading packet data through the Nginx proxy you may get a <tt>413 Request Entity Too Large</tt> error. This is caused by sending too many packets at each Elasticsearch bulk load call. You can either set the chunk size with the <tt>--chunk</tt> or increase the request entity size that Nginx will accept or both. To set a larger Nginx request entity limit add this line to the http or server or location sections of your Nginx configuration file: 
+  
   ```
   client_max_body_size     2M;
   ```
-<br>Set the value to your desired maximum entity (body) size then restart Nginx with this command:
+  
+Set the value to your desired maximum entity (body) size then restart Nginx with this command:
+  
   ```
   /usr/local/nginx/sbin/nginx -s reload
   ```
