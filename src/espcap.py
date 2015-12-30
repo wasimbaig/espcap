@@ -101,22 +101,36 @@ def index_packets(capture, pcap_file, file_date_utc, count):
     for packet in capture:
         highest_protocol, layers = get_layers(packet)
         sniff_timestamp = float(packet.sniff_timestamp) # use this field for ordering the packets in ES
-        action = {
-            '_op_type' : 'index',
-            '_index' : 'packets-'+datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%d'),
-            '_type' : 'pcap_file',
-            '_source' : {
-                'file_name' : pcap_file,
-                'file_date_utc' : file_date_utc.strftime('%Y-%m-%dT%H:%M:%S'),
-                'sniff_date_utc' : datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%dT%H:%M:%S'),
-                'sniff_timestamp' : sniff_timestamp,
-                'protocol' : highest_protocol,
-                'layers' : layers
+        if pcap_file == None:
+            action = {
+                '_op_type' : 'index',
+                '_index' : 'packets-'+datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%d'),
+                '_type' : 'pcap_live',
+                '_source' : {
+                    'sniff_date_utc' : datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%dT%H:%M:%S+0000'),
+                    'sniff_timestamp' : sniff_timestamp,
+                    'protocol' : highest_protocol,
+                    'layers' : layers
+                }
             }
-        }
-        yield action
+            yield action
+        else:
+            action = {
+                '_op_type' : 'index',
+                '_index' : 'packets-'+datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%d'),
+                '_type' : 'pcap_file',
+                '_source' : {
+                    'file_name' : pcap_file,
+                    'file_date_utc' : file_date_utc.strftime('%Y-%m-%dT%H:%M:%S'),
+                    'sniff_date_utc' : datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%dT%H:%M:%S+0000'),
+                    'sniff_timestamp' : sniff_timestamp,
+                    'protocol' : highest_protocol,
+                    'layers' : layers
+                }
+            }
+            yield action
         pkt_no += 1
-        if count > 0 and t_no > count:
+        if count > 0 and pkt_no > count:
             return
 
 # Dump raw packets to stdout
@@ -127,8 +141,8 @@ def dump_packets(capture, file_date_utc, count):
         sniff_timestamp = float(packet.sniff_timestamp)
         print 'Packet no.', pkt_no
         print '* protocol        -', highest_protocol
-        print '* file date UTC   -', file_date_utc.strftime('%Y-%m-%dT%H:%M:%S')
-        print '* sniff date UTC  -', datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%dT%H:%M:%S')
+        print '* file date UTC   -', file_date_utc.strftime('%Y-%m-%dT%H:%M:%S+0000')
+        print '* sniff date UTC  -', datetime.utcfromtimestamp(sniff_timestamp).strftime('%Y-%m-%dT%H:%M:%S+0000')
         print '* sniff timestamp -', sniff_timestamp
         print '* layers'
         for key in layers:
@@ -155,7 +169,7 @@ def live_capture(nic, bpf, node, chunk, count):
         if node == None:
             dump_packets(capture, sniff_date_utc, count)
         else:
-            helpers.bulk(es.index_packets(capture, sniff_date_utc, count), chunk_size=chunk, raise_on_error=True)
+            helpers.bulk(es, index_packets(capture, None, sniff_date_utc, count), chunk_size=chunk, raise_on_error=True)
 
     except Exception as e:
         print '[ERROR] ', e
@@ -228,7 +242,7 @@ def main(node, nic, file, dir, bpf, chunk, count, list):
 
     elif dir != None:
         pcap_files = []
-        files = os.listdir(pcap_dir)
+        files = os.listdir(dir)
         files.sort()
         for file in files:
             if dir.find('/') > 0:
