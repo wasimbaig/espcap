@@ -7,7 +7,8 @@ to parse any protocol.
 
 ## Requirements
 
-1. tshark (included in Wireshark)
+1. Python 2.7.10 (note that Espcap has not been tested on Python 3.x yet)
+2. tshark (included in Wireshark)
 2. Pyshark 0.3.5
 3. trollius 1.0.4
 4. Elasticsearch client for Python
@@ -17,7 +18,7 @@ to parse any protocol.
 
 It is highly recommended, although not required, that you use the Anaconda Python 
 distribution by Continuum Analytics for __Espcap__. This distribution contains Python
-2.7.10 and bundles a rich set of programming packages for analytics and machine 
+2.7.x and bundles a rich set of programming packages for analytics and machine 
 learning.  You can download Anaconda Python here: http://continuum.io/downloads.
 
 ## Installation
