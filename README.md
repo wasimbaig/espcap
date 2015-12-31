@@ -55,7 +55,7 @@ pip install click
 
 ## Running Examples
 
-- Display the following help message:
++ Display the following help message:
   
   ```
   espcap.py --help
@@ -67,17 +67,18 @@ pip install click
     --nic TEXT       Network interface for live capture (default=None, if file
                      or dir specified)
     --file TEXT      PCAP file for file capture (default=None, if nic specified)
-    --dir TEXT       PCAP directory for multiple file capture (default=None, if nic specified)
+    --dir TEXT       PCAP directory for multiple file capture (default=None, if
+                     nic specified)
     --bpf TEXT       Packet filter for live capture (default=all packets)
     --chunk INTEGER  Number of packets to bulk index (default=1000)
     --count INTEGER  Number of packets to capture during live capture
-                    (default=0, capture indefinitely)
+                     (default=0, capture indefinitely)
     --list           List the network interfaces
     --help           Show this message and exit.
   ```
   
 + Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming your present working directory is espcap/src:
-+ 
+
   ```
   espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
   ```
