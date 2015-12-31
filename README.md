@@ -7,7 +7,7 @@ to parse any protocol.
 
 ## Requirements
 
-1. Python 2.7.10 (note that Espcap has not been tested on Python 3.x yet)
+1. Python 2.7.10 or greater (see Known issues #1)
 2. tshark (included in Wireshark)
 2. Pyshark 0.3.5
 3. trollius 1.0.4
@@ -17,37 +17,39 @@ to parse any protocol.
 ## Recommendations
 
 It is highly recommended, although not required, that you use the Anaconda Python 
-distribution by Continuum Analytics for __Espcap__. This distribution contains Python
-2.7.x and bundles a rich set of programming packages for analytics and machine 
-learning.  You can download Anaconda Python here: http://continuum.io/downloads.
+distribution by Continuum Analytics for __Espcap__. This distribution contains the
+required Python version and bundles a rich set of programming packages for analytics and
+machine learning.  You can download Anaconda Python here: http://continuum.io/downloads.
 
 ## Installation
 
-1. Install Wireshark for your OS.</li>
+1. Install Wireshark for your OS.
 2. Install Pyshark, trollius, and the Elasticsearch client for Python with pip:
-<pre>
-pip uninstall pyshark
-pip install pyshark==0.3.5
-pip uninstall trollius
-pip install trollius==1.0.4
-pip install elasticsearch
-pip install click
-</pre>
-3. Clone the espcap repo then cd into the espcap directory.
-4. Create the packet index template by running scripts/templates.sh as follows specifying the node IP address and TCP port of yoru Elasticsearch instance (localhost:9200 in this example):
+
+  ```
+  pip uninstall pyshark
+  pip install pyshark==0.3.5
+  pip uninstall trollius
+  pip install trollius==1.0.4
+  pip install elasticsearch
+  pip install click
+  ```
+
+3. Clone the __Espcap__ repo then cd into the `espcap` directory.
+4. Create the packet index template by running `scripts/templates.sh` as follows specifying the node IP address and TCP port of your Elasticsearch instance (localhost:9200 in this example):
 
   ```
   scripts/templates.sh localhost:9200
   ```
   
-5. Set the tshark_path variable in the <tt>pyshark/config.ini</tt> file.
-6. Run <tt>espcap.py</tt> to index some packet data in Elasticsearch:
+5. Set the tshark_path variable in the `pyshark/config.ini` file.
+6. Run `espcap.py` to index some packet data in Elasticsearch:
   
   ```
   src/espcap.py --file=test_pcaps/test_http.pcap --node=localhost:9200
   ```
   
-7. Run <tt>packet_query.sh</tt> as follows to check that the packet data resides in your Elasticsearch instance:
+7. Run `packet_query.sh` as follows to check that the packet data resides in your Elasticsearch instance:
   
   ```
   scripts/packet_query.sh localhost:9200
@@ -77,25 +79,25 @@ pip install click
     --help           Show this message and exit.
   ```
   
-+ Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming your present working directory is espcap/src:
++ Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming your present working directory is `espcap/src`:
 
   ```
   espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
   ```
   
-+ Same as the previous except load the test_pcaps/test_http.pcap file:
++ Same as the previous except load the `test_pcaps/test_http.pcap` file:
   
   ```
   espcap.py --file=../test_pcaps/test_http.pcap --node=10.0.0.1:9200
   ```
   
-+ Do a live capture from the network interface <tt>eth0</tt>, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200:
++ Do a live capture from the network interface `eth0`, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200:
   
   ```
   espcap.py --nic=eth0 --node=10.0.0.1:9200
   ```
   
-+ Same as the previous except dump the packets to stdout:
++ Same as the previous except dump the packets to `stdout``:
   
   ```
   espcap.py --nic=eth0 
@@ -118,11 +120,11 @@ pip install click
 ### Time Series Indexing
 
 When indexing packet captures into Elasticsearch, an new index is created for each day. The 
-index naming format is <i>packets-yyyy-mm-dd</i>. The date is UTC derived from the packet sniff 
+index naming format is _packets-yyyy-mm-dd_. The date is UTC derived from the packet sniff
 timestamp obtained from pyshark either for live captures or the sniff timestamp read from pcap 
-files. Each index has two types, one for live capture <tt>pcap_live</tt> and file capture <tt>pcap_file</tt>. 
+files. Each index has two types, one for live capture `pcap_live` and file capture `pcap_file`. 
 Both types are dynamically mapped by Elasticsearch with exception of the date fields for either 
-<tt>pcap_file</tt> or <tt>pcap_live</tt> types which are mapped as Elasticsearch date fields if 
+`pcap_file` or `pcap_live` types which are mapped as Elasticsearch date fields if 
 you run the templates.sh script before indexing an packet data.
 
 Index IDs are automatically assigned by Elasticsearch.
@@ -140,8 +142,8 @@ layers             Dictionary containing the packet contents
 
 ### pcap_live type fields
 
-The <tt>pcap_live</tt> type is comprised of the same fields except the <i>file_name</i> and
-<i>file_date_utc</i> fields.
+The `pcap_live` type is comprised of the same fields except the _file_name_ and
+_file_date_utc_ fields.
 
 ## Packet Layer Structure
 
@@ -152,10 +154,10 @@ Packet layers are mapped in four basic sections based in protocol type within ea
 + Transport - transport layer which is either TCP (tcp) or UDP (udp).
 + Application - high level Internet protocol such as HTTP (http), DNS (dns), etc.
 
-Packet layers reside in a JSON section called <tt>layers</tt>. Each of the layers reside in a JSON 
+Packet layers reside in a JSON section called `layers`. Each of the layers reside in a JSON 
 that has the name of the protocol for that layer. The highest protocol for the whole packet, which 
-is the application protocol if the packet has such a layer, is indicate by the <tt>protocol</tt> 
-field that is at the sam level as the <tt>layers</tt> section.
+is the application protocol if the packet has such a layer, is indicate by the `protocol` 
+field that is at the sam level as the `layers` section.
 
 Below is an example of an HTTP packet as indexed in Elasticsearch.
 
@@ -301,19 +303,19 @@ layers.udp.dstport        Receiver UDP port
 layers.http.chat          HTTP response
 ```
 
-Note that some layer protocols span two sections. In the above example, the HTTP layer has an <tt>xml</tt> 
+Note that some layer protocols span two sections. In the above example, the HTTP layer has an `xml` 
 section associated with it. Extra sections like these can be associated with their protocol sections by 
-checking the <tt>envelope</tt> field contents.
+checking the `envelope` field contents.
 
 ## Protocol Support
 
 Technically __Espcap__ recognizes all the protocols supported by wireshark/tshark. However, the wireshark
 dissector set includes some strange protocols that are not really Internet protocols in the strictest
-sense, but are rather parts of other protocols. One example is <tt>media</tt> which is actually used to
-label an additional layer for the <tt>http</tt> protocol among other things. __Espcap__ uses the <tt>protocols.list</tt> 
+sense, but are rather parts of other protocols. One example is `media` which is actually used to
+label an additional layer for the `http` protocol among other things. __Espcap__ uses the `protocols.list` 
 to help determine the application level protocol in any given packet. This file is derived from tshark by 
-running the <tt>protocols.sh</tt> script in the <tt>conf</tt> directory. To ensure that __Espcap__ has only 
-true Internet protocols to choose from, the entries in <tt>protocols.list</tt> that are not truly Internet 
+running the `protocols.sh` script in the `conf` directory. To ensure that __Espcap__ has only 
+true Internet protocols to choose from, the entries in `protocols.list` that are not truly Internet 
 protocols have been commented out. Currently the commented out protocols include the following:
 
 ```
@@ -342,9 +344,9 @@ this fashion.
 On the other hand If you get a little too frisky and comment out too many protocols or you just want to 
 generate a fresh list, do the following:
 
-1. Run <tt>protocols.sh</tt> script which produces a clean protocol list in <tt>protocols.txt</tt>.
+1. Run `protocols.sh` script which produces a clean protocol list in `protocols.txt`.
 2. Comment out the protocols in the list above and others you don't want to consider.
-3. Replace the contents of <tt>protocols.list</tt> with the contents of <tt>protocols.txt</tt>.
+3. Replace the contents of `protocols.list` with the contents of `protocols.txt`.
 
 ### Known Issues
 
