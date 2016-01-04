@@ -288,7 +288,7 @@ Below is an example of an HTTP packet as indexed in Elasticsearch.
 ```
 
 Note that the highest level protocol present in any given packet is indicated by the `protocol`
-field. In this example the protocols `http`. Packets lacking an application level protocol,
+field. In this example the protocols `http`. For packets lacking an application level protocol,
 the protocol will be set to the transport, network, or link protocol name. For example, a TCP
 SYN packet would have the protocol field set to `tcp`.
 
