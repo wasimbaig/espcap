@@ -7,7 +7,7 @@
 
    ----------------------------------------------------
 
-   Copyright (c) 2015 [Vic Hargrave - http://vichargrave.com]
+   Copyright (c) 2016 [Vic Hargrave - http://vichargrave.com]
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@
    limitations under the License.
 '''
 
+import syslog
 import os
 import signal
 import sys
@@ -196,6 +197,7 @@ def live_capture(nic, bpf, node, chunk, count):
 
     except Exception as e:
         print '[ERROR] ', e
+        syslog.syslog(syslog.LOG_ERR, e.message)
 
 # File capture function
 def file_capture(pcap_files, node, chunk):
@@ -219,6 +221,8 @@ def file_capture(pcap_files, node, chunk):
 
     except Exception as e:
         print '[ERROR] ', e
+        syslog.syslog(syslog.LOG_ERR, e.message)
+
 
 # Returns list of network interfaces (nic)
 def list_interfaces():
@@ -253,6 +257,7 @@ def main(node, nic, file, dir, bpf, chunk, count, list):
         print 'You must specify either file or live capture'
         sys.exit(1)
 
+    syslog.syslog("espcap started")
     signal.signal(signal.SIGINT, interrupt_handler)
 
     if nic != None:
