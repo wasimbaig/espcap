@@ -16,40 +16,57 @@ to parse any protocol.
 
 ## Recommendations
 
-It is highly recommended, although not required, that you use the Anaconda Python 
-distribution by Continuum Analytics for __Espcap__. This distribution contains the
-required Python version and bundles a rich set of programming packages for analytics and
-machine learning.  You can download Anaconda Python here: http://continuum.io/downloads.
+The easiest way to experiment with this or any other Python project is to use virtualenv and virtualenvwrapper to run __Espcap__ in a virtual environment. With that in mind I have inbcluded instructions for installing  these tools in the installation instructions.
 
 ## Installation
 
 1. Install Wireshark for your OS.
-2. Install Pyshark, trollius, and the Elasticsearch client for Python with pip:
-
+2. Install virtualenv then virtualenvwrapper:
+  
   ```
-  pip uninstall pyshark
-  pip install pyshark==0.3.5
-  pip uninstall trollius
-  pip install trollius==1.0.4
-  pip install elasticsearch
-  pip install click
+  pip install virtualenv
+  pip install virtualenvwrapper
   ```
 
-3. Clone the __Espcap__ repo then cd into the `espcap` directory.
-4. Create the packet index template by running `scripts/templates.sh` as follows specifying the node IP address and TCP port of your Elasticsearch instance (localhost:9200 in this example):
+3. Create a virtual environment for __Espcap__ called `vespcap` (or some other name you prefer) like this:
+
+  ```
+  mkvirtualenv vespcap
+  ```
+
+  Note that this will put you into the `vespcap` virtual environment. To leave this environment just type:
+  
+  ```
+  deactivate
+  ```
+  
+  To re-activate this environment to run __Espcap__ later type:
+
+  ```
+  workon vespcap
+  ```
+
+4. Install the required Python modules:
+
+  ```
+  pip install -r requirements.txt
+  ```
+
+5. Clone the __Espcap__ repo then cd into the `espcap` directory. 
+6. Create the packet index template by running `scripts/templates.sh` as follows specifying the node IP address and TCP port of your Elasticsearch instance (localhost:9200 in this example):
 
   ```
   scripts/templates.sh localhost:9200
   ```
   
-5. Set the tshark_path variable in the `pyshark/config.ini` file.
-6. Run `espcap.py` to index some packet data in Elasticsearch:
+7. Set the tshark_path variable in the `pyshark/config.ini` file.
+8. Run `espcap.py` to index some packet data in Elasticsearch:
   
   ```
   src/espcap.py --file=test_pcaps/test_http.pcap --node=localhost:9200
   ```
   
-7. Run `packet_query.sh` as follows to check that the packet data resides in your Elasticsearch instance:
+9. Run `packet_query.sh` as follows to check that the packet data resides in your Elasticsearch instance:
   
   ```
   scripts/packet_query.sh localhost:9200
