@@ -16,7 +16,7 @@ to parse any protocol.
 
 ## Recommendations
 
-The easiest way to experiment with this or any other Python project is to use virtualenv and virtualenvwrapper to run __Espcap__ in a virtual environment. With that in mind I have inbcluded instructions for installing  these tools in the installation instructions.
+The easiest way to experiment with this or any other Python project is to use virtualenv and virtualenvwrapper to run __Espcap__ in a virtual environment. With that in mind I have inbcluded instructions for installing  these tools.
 
 ## Installation
 
