@@ -74,6 +74,12 @@ The easiest way to experiment with this or any other Python project is to use vi
 
 ## Running Examples
 
++ You must run these examples in your __Espcap__ directory and virtual environment, so activate your virtual environment first. Assuming you called your virtual environment `vespcap` run this command:
+
+  ```
+  workon vespcap
+  ```
+
 + Display the following help message:
   
   ```
