@@ -34,32 +34,35 @@ import pyshark
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 
-supported_protocols = {}
+excluded_protocols = {}
+excluded_protocols_file = 'excluded_protocols.list'
 
 # Get supported application protocols
-def get_protocols():
-    global supported_protocols
+def get_excluded_protocols():
+    global excluded_protocols
+    global excluded_protocols_file
     fp = None
-    if os.path.isfile('./protocols.list'):
-        fp = open('./protocols.list')
-    elif os.path.isfile('../conf/protocols.list'):
-        fp = open('../conf/protocols.list')
-    elif os.path.isfile('conf/protocols.list'):
-        fp = open('conf/protocols.list')
+    if os.path.isfile(excluded_protocols_file):
+        fp = open(excluded_protocols_file)
+    elif os.path.isfile('../conf/'+excluded_protocols_file):
+        fp = open('../conf/'+excluded_protocols_file)
+    elif os.path.isfile('conf/'+excluded_protocols_file):
+        fp = open('conf/'+excluded_protocols_file)
     protocols = fp.readlines()
     for protocol in protocols:
         protocol = protocol.strip()
-        supported_protocols[protocol] = 1
+        excluded_protocols[protocol] = 1
 
 # Get application level protocol
 def get_highest_protocol(packet):
-    global supported_protocols
-    if not supported_protocols:
-        get_protocols()
+    global excluded_protocols
+    if not excluded_protocols:
+        get_excluded_protocols()
     for layer in reversed(packet.layers):
-        if layer.layer_name in supported_protocols:
-            return layer.layer_name
-    return 'wtf'
+        if layer.layer_name in excluded_protocols:
+            continue
+        else:
+            return str.replace(layer.layer_name, '.', '-')
 
 # Get the protocol layer fields
 def get_layer_fields(layer):
@@ -77,6 +80,7 @@ def get_layers(packet):
 
     # Link layer
     layers[packet.layers[0].layer_name] = get_layer_fields(packet.layers[0])
+    layers[packet.layers[0].layer_name]['level'] = 0
     layer_above_transport = 0
 
     # Get the rest of the layers
@@ -86,24 +90,29 @@ def get_layers(packet):
         # Network layer - ARP
         if layer.layer_name == 'arp':
             layers[layer.layer_name] = get_layer_fields(layer)
+            layers[layer.layer_name]['level'] = i
             return highest_protocol, layers
 
         # Network layer - IP or IPv6
         elif layer.layer_name == 'ip' or layer.layer_name == 'ipv6':
             layers[layer.layer_name] = get_layer_fields(layer)
+            layers[layer.layer_name]['level'] = i
 
         # Transport layer - TCP, UDP, ICMP, IGMP, IDMP, or ESP
         elif layer.layer_name == 'tcp' or layer.layer_name == 'udp' or layer.layer_name == 'icmp' or layer.layer_name == 'igmp' or layer.layer_name == 'idmp' or layer.layer_name == 'esp':
             layers[layer.layer_name] = get_layer_fields(layer)
+            layers[layer.layer_name]['level'] = i
             if highest_protocol == 'tcp' or highest_protocol == 'udp' or highest_protocol == 'icmp' or highest_protocol == 'esp':
                 return highest_protocol, layers
             layer_above_transport = i+1
             break
 
-        # Additional transport layer data
+        # Additional layers
         else:
             layers[layer.layer_name] = get_layer_fields(layer)
-            layers[packet.layers[i].layer_name]['envelope'] = packet.layers[i-1].layer_name
+            layers[layer.layer_name]['level'] = i
+
+            # layers[packet.layers[i].layer_name]['envelope'] = packet.layers[i-1].layer_name
 
     for j in range(layer_above_transport,n):
         layer = packet.layers[j]
@@ -111,11 +120,17 @@ def get_layers(packet):
         # Application layer
         if layer.layer_name == highest_protocol:
             layers[layer.layer_name] = get_layer_fields(layer)
+            layers[layer.layer_name]['level'] = i
 
         # Additional application layer data
         else:
-            layers[layer.layer_name] = get_layer_fields(layer)
-            layers[layer.layer_name]['envelope'] = packet.layers[j-1].layer_name
+            layer_name = str.replace(layer.layer_name, '.', '-')
+            if layer_name == '_ws-malformed':
+                layer_name = '[Malformed_Packet]'
+            layers[layer_name] = get_layer_fields(layer)
+            layers[layer_name]['level'] = i
+
+ #           layers[layer_name]['envelope'] = packet.layers[j-1].layer_name
 
     return highest_protocol, layers
 

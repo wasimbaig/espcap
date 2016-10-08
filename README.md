@@ -23,54 +23,66 @@ The easiest way to experiment with this or any other Python project is to use vi
 1. Install Wireshark for your OS.
 2. Install virtualenv then virtualenvwrapper:
   
-  ```
-  pip install virtualenv
-  pip install virtualenvwrapper
-  ```
+   ```
+   pip install virtualenv
+   pip install virtualenvwrapper
+   ```
 
-3. Create a virtual environment for __Espcap__ called `vespcap` (or some other name you prefer) like this:
+3. Add this section of code to your `.bash_profile`:
 
-  ```
-  mkvirtualenv vespcap
-  ```
+   ```
+   if [[ -r /usr/local/bin/virtualenvwrapper.sh ]]; then
+      source /usr/local/bin/virtualenvwrapper.sh
+   else
+      echo "WARNING: Can't find virtualenvwrapper.sh"
+   fi
 
-  Note that this will put you into the `vespcap` virtual environment. To leave this environment just type:
+   ```
+4. Then source your `.bash_profile`:
+
+   ```
+   source $HOME/.bash_profile
+   ```
+5. Create a virtual environment for __Espcap__ called `vespcap` (or some other name you prefer) like this:
+
+   ```
+   mkvirtualenv vespcap
+   ```
+   Note that this will put you into the `vespcap` virtual environment. To leave this environment just type:
+
+   ```
+   deactivate
+   ```
+   To re-activate this environment to run __Espcap__ later type:
+
+   ```
+   workon vespcap
+   ```
+6. Install the required Python modules:
+
+   ```
+   pip install -r requirements.txt
+   ```
+
+7. Clone the __Espcap_ repo then cd into the `espcap` directory. 
+8. Create the packet index template by running `scripts/templates.sh` as follows specifying the node IP address and TCP port of your Elasticsearch instance (localhost:9200 in this example):
+
+   ```
+   scripts/templates.sh localhost:9200
+   ```
   
-  ```
-  deactivate
-  ```
+9. Set the tshark_path variable in the `pyshark/config.ini` file.
+10. Run `espcap.py` to index some packet data in Elasticsearch:
   
-  To re-activate this environment to run __Espcap__ later type:
-
-  ```
-  workon vespcap
-  ```
-
-4. Install the required Python modules:
-
-  ```
-  pip install -r requirements.txt
-  ```
-
-5. Clone the __Espcap__ repo then cd into the `espcap` directory. 
-6. Create the packet index template by running `scripts/templates.sh` as follows specifying the node IP address and TCP port of your Elasticsearch instance (localhost:9200 in this example):
-
-  ```
-  scripts/templates.sh localhost:9200
-  ```
+    ```
+    src/espcap.py --file=test_pcaps/test_http.pcap --node=localhost:9200
+    ```
   
-7. Set the tshark_path variable in the `pyshark/config.ini` file.
-8. Run `espcap.py` to index some packet data in Elasticsearch:
+11. Run `packet_query.sh` as follows to check that the packet data resides in your Elasticsearch instance:
   
-  ```
-  src/espcap.py --file=test_pcaps/test_http.pcap --node=localhost:9200
-  ```
-  
-9. Run `packet_query.sh` as follows to check that the packet data resides in your Elasticsearch instance:
-  
-  ```
-  scripts/packet_query.sh localhost:9200
-  ```
+    ```
+    scripts/packet_query.sh localhost:9200
+    ```
 
 ## Running Examples
 
@@ -165,150 +177,15 @@ layers             Dictionary containing the packet contents
 
 ### pcap_live type fields
 
-The `pcap_live` type is comprised of the same fields except the _file_name_ and
-_file_date_utc_ fields.
+The `pcap_live` type is comprised of the same fields except the _file_name_ and _file_date_utc_ 
+fields.
 
 ## Packet Layer Structure
 
-Packet layers are mapped in four basic sections based in protocol type within each index:
-
-+ __Link__ - link to the physical network media, usually Ethernet (eth).
-+ __Network__ - network routing layer which is always IP (ip).
-+ __Transport__ - transport layer which is either TCP (tcp) or UDP (udp).
-+ __Application__ - high level Internet protocol such as HTTP (http), DNS (dns), etc.
-
 Packet layers reside in a JSON section called `layers`. Each of the layers reside in a JSON 
-that has the name of the protocol for that layer. The highest protocol for the whole packet, which 
-is the application protocol if the packet has such a layer, is indicate by the `protocol` 
+that has the name of the protocol for that layer. The highest protocol for the whole packet, 
+which is the application protocol if the packet has such a layer, is indicate by the `protocol` 
 field that is at the sam level as the `layers` section.
-
-Below is an example of an HTTP packet as indexed in Elasticsearch.
-
-```
-{
-    "_index": "packets-2015-07-30",
-    "_type": "pcap_file",
-    "_id": "AVAaipoMtaVU9i_NA682",
-    "_score": null,
-    "_source": {
-        "layers": {
-            "xml": {
-                "xmlpi_encoding": "UTF-8",
-                "attribute": "nonce=\"a234fb85622b87cd9c8626e57250ece56310f2de\"",
-                "envelope": "http",
-                "tag": "<query nonce=\"a234fb85622b87cd9c8626e57250ece56310f2de\">",
-                "cdata": "A new version with bug fix is available! Click to update.",
-                "xmlpi_xml": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>",
-                "xmlpi_version": "1.0"
-            },
-            "ip": {
-                "checksum_bad": "0",
-                "checksum_good": "0",
-                "ttl": "41",
-                "id": "52361",
-                "dsfield": "32",
-                "addr": "83.145.197.2",
-                "proto": "6",
-                "flags_rb": "0",
-                "dst": "10.0.0.4",
-                "version": "4",
-                "flags_mf": "0",
-                "dsfield_dscp": "8",
-                "hdr_len": "20",
-                "len": "1020",
-                "dsfield_ecn": "0",
-                "host": "83.145.197.2",
-                "frag_offset": "0",
-                "src": "83.145.197.2",
-                "checksum": "24251",
-                "flags_df": "1",
-                "dst_host": "10.0.0.4",
-                "flags": "2",
-                "src_host": "83.145.197.2"
-            },
-            "eth": {
-                "dst_resolved": "60:f8:1d:cb:43:84",
-                "lg": "0",
-                "addr": "60:f8:1d:cb:43:84",
-                "src": "58:23:8c:b4:42:56",
-                "addr_resolved": "60:f8:1d:cb:43:84",
-                "dst": "60:f8:1d:cb:43:84",
-                "type": "2048",
-                "src_resolved": "58:23:8c:b4:42:56",
-                "ig": "0"
-            },
-            "http": {
-                "content_length": "637",
-                "_ws_expert": "Expert Info (Chat/Sequence): HTTP/1.1 200 OK\\r\\n",
-                "cache_control": "no-store, max-age=0",
-                "response_code": "200",
-                "time": "0.196748000",
-                "server": "Apache",
-                "response_phrase": "OK",
-                "connection": "close",
-                "response_line": "Date: Thu, 30 Jul 2015 05:22:11 GMT\\xd\\xa",
-                "request_version": "HTTP/1.1",
-                "content_encoding": "gzip",
-                "chat": "HTTP/1.1 200 OK\\r\\n",
-                "content_length_header": "637",
-                "date": "Thu, 30 Jul 2015 05:22:11 GMT",
-                "_ws_expert_group": "33554432",
-                "response": "1",
-                "content_type": "application/xml",
-                "request_in": "62",
-                "_ws_expert_message": "HTTP/1.1 200 OK\\r\\n",
-                "_ws_expert_severity": "2097152"
-            },
-            "tcp": {
-                "flags_cwr": "0",
-                "checksum_bad": "0",
-                "seq": "1",
-                "flags_ecn": "0",
-                "options_type_class": "0",
-                "flags_syn": "0",
-                "checksum_good": "0",
-                "flags_reset": "0",
-                "window_size_value": "57",
-                "options_type_copy": "0",
-                "analysis_initial_rtt": "0.197580000",
-                "window_size": "7296",
-                "stream": "3",
-                "option_len": "10",
-                "flags_urg": "0",
-                "port": "80",
-                "options_timestamp_tsecr": "387046361",
-                "window_size_scalefactor": "128",
-                "dstport": "59807",
-                "hdr_len": "32",
-                "options_type_number": "1",
-                "len": "968",
-                "flags_res": "0",
-                "urgent_pointer": "0",
-                "analysis_bytes_in_flight": "968",
-                "flags_push": "1",
-                "flags_ns": "0",
-                "flags_ack": "1",
-                "option_kind": "8",
-                "ack": "707",
-                "checksum": "41766",
-                "flags_fin": "0",
-                "srcport": "80",
-                "analysis": "SEQ/ACK analysis",
-                "flags": "24",
-                "options_timestamp_tsval": "551709239",
-                "nxtseq": "969",
-                "options": "01:01:08:0a:20:e2:6a:37:17:11:db:d9",
-                "options_type": "1"
-            }
-        },
-        "protocol": "http",
-        "sniff_timestamp": 1438233732.662099,
-        "file_name": "../test_pcaps/test_http.pcap",
-        "sniff_date_utc": "2015-07-30T05:22:12+0000",
-        "file_date_utc": "2015-09-23T01:41:26+0000"
-    }
-}
-```
 
 Note that the highest level protocol present in any given packet is indicated by the `protocol`
 field. In this example the protocols `http`. For packets lacking an application level protocol,
@@ -321,7 +198,8 @@ The convention for accessing protocol fields in the JSON layers structure is:
 layers.protocol.field
 ```
 
-Here are some examples of how to reference specific layer fields taken from the packet JSON shown above:
+Here are some examples of how to reference specific layer fields taken from the packet JSON 
+shown above:
 
 ```
 layers.ip.src             Sender IP address
@@ -331,56 +209,33 @@ layers.udp.dstport        Receiver UDP port
 layers.http.chat          HTTP response
 ```
 
-Note that some layer protocols span two sections. In the above example, the HTTP layer has an `xml` 
-section associated with it. Extra sections like these can be associated with their protocol sections by 
-checking the `envelope` field contents.
-
 ## Protocol Support
 
-Technically __Espcap__ recognizes all the protocols supported by wireshark/tshark. However, the wireshark
-dissector set includes some strange protocols that are not really Internet protocols in the strictest
-sense, but are rather parts of other protocols. One example is `media` which is actually used to
-label an additional layer for the `http` protocol among other things. __Espcap__ uses the `protocols.list` 
-to help determine the application level protocol in any given packet.
+Technically __Espcap__ recognizes all the protocols supported by wireshark/tshark. However, 
+the wiresharkdissectors create some layers that are not truly protocols but rather are special 
+cases such as malformed packets.  __Espcap__ uses the `excluded_protocols.list` to prevent these 
+layers created by tshark from  included for consideration as the application level protocol for 
+any given packet.
 
-This file is derived from tshark by running the `protocols.sh` script in the `conf` directory. To ensure
-that __Espcap__ has only true Internet protocols to choose from, the entries in `protocols.list` that are
-not truly Internet protocols have been commented out. Currently the commented out protocols include the
-following:
+If you want to see a complete list of protocols supported by tshark, run:
 
 ```
-_ws.expert
-_ws.lua
-_ws.malformed
-_ws.number_string.decoding_error
-_ws.short
-_we.type_length
-_ws.unreassembled
-data
-data-l1-events
-data-text-lines
-image-gif
-image-jfif
-media
-null
-png
-xml
-zip
+conf/protocols.sh
 ```
 
-To make the search of this list more efficient, you should just delete these commented out lines from
-`protocols.list`. Likewise, if there are any other protocols you believe should not be considered, then
-delete them as well.
+If you see other protocols that you want to exclude from being considered as application level 
+protocols, add the from the list produced by this script to the `conf/excluded_protocols.list` 
+file.
 
-If you get a little too frisky and delete too many protocols or you just want to generate a fresh list,
-do the following either get a fresh `protocols.list` from the __Espcap__ repo or do the following:
+## Known Issues
 
-1. Run `protocols.sh` script which produces a clean protocol list in `protocols.txt`.
-2. Comment out the protocols in the list above and others you don't want to consider.
-3. Replace the contents of `protocols.list` with the contents of `protocols.txt`.
-4. Remove the protocols shown above from your new `protocols.txt` file.
-
-### Known Issues
-
-1. It appears that __Espcap__ does not work with Python versions less than 2.7.10.
+1. Not all _ws.* layers are mapped to descriptive terms, except for _ws.expert.
 2. __Espcap__ has not yet been tested on Python 3.x.
+
+## Changelog
+
+	0.1     - Converted _ws.* layer names to _ws-* which is compatible with Elasticsearch 2.x field
+	          naming requirements. 
+	        - Renamed _ws.expert layer name to `[Malformed_Packet]`
+	        - Use `conf/excluded_protocols` to identify tshark expert layers that are not really
+	          protocols
