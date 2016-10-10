@@ -112,8 +112,6 @@ def get_layers(packet):
             layers[layer.layer_name] = get_layer_fields(layer)
             layers[layer.layer_name]['level'] = i
 
-            # layers[packet.layers[i].layer_name]['envelope'] = packet.layers[i-1].layer_name
-
     for j in range(layer_above_transport,n):
         layer = packet.layers[j]
 
@@ -129,9 +127,7 @@ def get_layers(packet):
                 layer_name = '[Malformed_Packet]'
             layers[layer_name] = get_layer_fields(layer)
             layers[layer_name]['level'] = i
-
- #           layers[layer_name]['envelope'] = packet.layers[j-1].layer_name
-
+            
     return highest_protocol, layers
 
 # Index packets in Elasticsearch
