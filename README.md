@@ -188,7 +188,7 @@ which is the application protocol if the packet has such a layer, is indicate by
 field that is at the sam level as the `layers` section.
 
 Note that the highest level protocol present in any given packet is indicated by the `protocol`
-field. In this example the protocols `http`. For packets lacking an application level protocol,
+field. For packets lacking an application level protocol,
 the protocol will be set to the transport, network, or link protocol name. For example, a TCP
 SYN packet would have the protocol field set to `tcp`.
 
