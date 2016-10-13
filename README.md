@@ -7,7 +7,7 @@ to parse any protocol.
 
 ## Requirements
 
-1. Python 2.7.10 or greater (see Known issues #1)
+1. Python 2.7.10 or greater 
 2. tshark (included in Wireshark)
 2. Pyshark 0.3.5
 3. trollius 1.0.4
