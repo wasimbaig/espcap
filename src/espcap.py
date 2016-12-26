@@ -7,7 +7,7 @@
 
    ----------------------------------------------------
 
-   Copyright (c) 2016 [Vic Hargrave - http://vichargrave.com]
+   Copyright (c) 2016 Vic Hargrave
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.
@@ -127,7 +127,7 @@ def get_layers(packet):
                 layer_name = '[Malformed_Packet]'
             layers[layer_name] = get_layer_fields(layer)
             layers[layer_name]['level'] = i
-            
+
     return highest_protocol, layers
 
 # Index packets in Elasticsearch
