@@ -7,7 +7,7 @@ to parse any protocol.
 
 ## Requirements
 
-1. Python 2.7.10 or greater 
+1. Python 2.7.10 or greater
 2. tshark (included in Wireshark)
 2. Pyshark 0.3.5
 3. trollius 1.0.4
@@ -22,7 +22,7 @@ The easiest way to experiment with this or any other Python project is to use vi
 
 1. Install Wireshark for your OS.
 2. Install virtualenv then virtualenvwrapper:
-  
+
    ```
    pip install virtualenv
    pip install virtualenvwrapper
@@ -64,22 +64,22 @@ The easiest way to experiment with this or any other Python project is to use vi
    pip install -r requirements.txt
    ```
 
-7. Clone the __Espcap_ repo then cd into the `espcap` directory. 
+7. Clone the __Espcap__ repo then cd into the `espcap` directory. 
 8. Create the packet index template by running `scripts/templates.sh` as follows specifying the node IP address and TCP port of your Elasticsearch instance (localhost:9200 in this example):
 
    ```
    scripts/templates.sh localhost:9200
    ```
-  
+
 9. Set the tshark_path variable in the `pyshark/config.ini` file.
 10. Run `espcap.py` to index some packet data in Elasticsearch:
-  
+
     ```
     src/espcap.py --file=test_pcaps/test_http.pcap --node=localhost:9200
     ```
-  
+
 11. Run `packet_query.sh` as follows to check that the packet data resides in your Elasticsearch instance:
-  
+
     ```
     scripts/packet_query.sh localhost:9200
     ```
@@ -93,11 +93,11 @@ The easiest way to experiment with this or any other Python project is to use vi
   ```
 
 + Display the following help message:
-  
+
   ```
   espcap.py --help
   Usage: espcap.py [OPTIONS]
-  
+
   Options:
     --node TEXT      Elasticsearch IP and port (default=None, dump packets to
                      stdout)
@@ -113,53 +113,53 @@ The easiest way to experiment with this or any other Python project is to use vi
     --list           List the network interfaces
     --help           Show this message and exit.
   ```
-  
+
 + Load the test packet capture files and index the packets in the Elasticsearch cluster running at 10.0.0.1:9200, assuming your present working directory is `espcap/src`:
 
   ```
   espcap.py --dir=../test_pcaps --node=10.0.0.1:9200
   ```
-  
+
 + Same as the previous except load the `test_pcaps/test_http.pcap` file:
-  
+
   ```
   espcap.py --file=../test_pcaps/test_http.pcap --node=10.0.0.1:9200
   ```
-  
+
 + Do a live capture from the network interface `eth0`, get all packets and index them in the Elasticsearch cluster running at 10.0.0.1:9200:
-  
+
   ```
   espcap.py --nic=eth0 --node=10.0.0.1:9200
   ```
-  
+
 + Same as the previous except dump the packets to `stdout``:
-  
+
   ```
-  espcap.py --nic=eth0 
+  espcap.py --nic=eth0
   ```
-  
+
 + Do a live capture of TCP packets with source port or destination port == 80 and index in Elasticsearch running at 10.0.0.1:9200:
-  
+
   ```
   espcap.py --nic=eth0 --bpf='tcp port 80' --node=10.0.0.1:9200
   ```
-  
+
 + List the network interfaces
-  
+
   ```
-  espcap.py --list 
+  espcap.py --list
   ```
 
 ## Packet Indexing
 
 ### Time Series Indexing
 
-When indexing packet captures into Elasticsearch, an new index is created for each day. The 
+When indexing packet captures into Elasticsearch, an new index is created for each day. The
 index naming format is _packets-yyyy-mm-dd_. The date is UTC derived from the packet sniff
-timestamp obtained from pyshark either for live captures or the sniff timestamp read from pcap 
-files. Each index has two types, one for live capture `pcap_live` and file capture `pcap_file`. 
-Both types are dynamically mapped by Elasticsearch with exception of the date fields for either 
-`pcap_file` or `pcap_live` types which are mapped as Elasticsearch date fields if 
+timestamp obtained from pyshark either for live captures or the sniff timestamp read from pcap
+files. Each index has two types, one for live capture `pcap_live` and file capture `pcap_file`.
+Both types are dynamically mapped by Elasticsearch with exception of the date fields for either
+`pcap_file` or `pcap_live` types which are mapped as Elasticsearch date fields if
 you run the templates.sh script before indexing an packet data.
 
 Index IDs are automatically assigned by Elasticsearch.
@@ -177,14 +177,14 @@ layers             Dictionary containing the packet contents
 
 ### pcap_live type fields
 
-The `pcap_live` type is comprised of the same fields except the _file_name_ and _file_date_utc_ 
+The `pcap_live` type is comprised of the same fields except the _file_name_ and _file_date_utc_
 fields.
 
 ## Packet Layer Structure
 
-Packet layers reside in a JSON section called `layers`. Each of the layers reside in a JSON 
-that has the name of the protocol for that layer. The highest protocol for the whole packet, 
-which is the application protocol if the packet has such a layer, is indicate by the `protocol` 
+Packet layers reside in a JSON section called `layers`. Each of the layers reside in a JSON
+that has the name of the protocol for that layer. The highest protocol for the whole packet,
+which is the application protocol if the packet has such a layer, is indicate by the `protocol`
 field that is at the sam level as the `layers` section.
 
 Note that the highest level protocol present in any given packet is indicated by the `protocol`
@@ -198,7 +198,7 @@ The convention for accessing protocol fields in the JSON layers structure is:
 layers.protocol.field
 ```
 
-Here are some examples of how to reference specific layer fields taken from the packet JSON 
+Here are some examples of how to reference specific layer fields taken from the packet JSON
 shown above:
 
 ```
@@ -211,10 +211,10 @@ layers.http.chat          HTTP response
 
 ## Protocol Support
 
-Technically __Espcap__ recognizes all the protocols supported by wireshark/tshark. However, 
-the wiresharkdissectors create some layers that are not truly protocols but rather are special 
-cases such as malformed packets.  __Espcap__ uses the `excluded_protocols.list` to prevent these 
-layers created by tshark from  included for consideration as the application level protocol for 
+Technically __Espcap__ recognizes all the protocols supported by wireshark/tshark. However,
+the wiresharkdissectors create some layers that are not truly protocols but rather are special
+cases such as malformed packets.  __Espcap__ uses the `excluded_protocols.list` to prevent these
+layers created by tshark from  included for consideration as the application level protocol for
 any given packet.
 
 If you want to see a complete list of protocols supported by tshark, run:
@@ -223,8 +223,8 @@ If you want to see a complete list of protocols supported by tshark, run:
 conf/protocols.sh
 ```
 
-If you see other protocols that you want to exclude from being considered as application level 
-protocols, add the from the list produced by this script to the `conf/excluded_protocols.list` 
+If you see other protocols that you want to exclude from being considered as application level
+protocols, add the from the list produced by this script to the `conf/excluded_protocols.list`
 file.
 
 ## Known Issues
@@ -235,7 +235,7 @@ file.
 ## Changelog
 
 	0.1     - Converted _ws.* layer names to _ws-* which is compatible with Elasticsearch 2.x field
-	          naming requirements. 
+	          naming requirements.
 	        - Renamed _ws.expert layer name to `[Malformed_Packet]`
 	        - Use `conf/excluded_protocols` to identify tshark expert layers that are not really
 	          protocols
