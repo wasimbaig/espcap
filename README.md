@@ -58,13 +58,15 @@ The easiest way to experiment with this or any other Python project is to use vi
    ```
    workon vespcap
    ```
-6. Install the required Python modules:
+
+6. Clone the __Espcap__ repo then cd into the `espcap` directory. 
+
+7. Install the required Python modules:
 
    ```
    pip install -r requirements.txt
    ```
 
-7. Clone the __Espcap__ repo then cd into the `espcap` directory. 
 8. Create the packet index template by running `scripts/templates.sh` as follows specifying the node IP address and TCP port of your Elasticsearch instance (localhost:9200 in this example):
 
    ```
